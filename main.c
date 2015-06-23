@@ -22,7 +22,8 @@ int main(void) {
 	person_t player;
 	char name[50];
 	printf("What is your name?\n> ");
-	scanf("%s", name);
+	fgets(name, sizeof(name), stdin);
+	name[strcspn(name, "\n")] = 0; // Remove trailing newline
 	person_init(&player, name);
 	printf("Hello, %s!\n", player.name);
 
@@ -35,7 +36,7 @@ int main(void) {
 
 	while (true) {
 		printf("> ");
-		scanf("%s", input);
+		fgets(input, sizeof(input), stdin);
 
 		handle_input(input, &commands, &context);
 	}
@@ -55,6 +56,14 @@ void handle_input(char* input, vector_t* commands, context_t* context) {
 		command_t* cmd = (command_t*)vector_get(commands, i);
 
 		if(strncmp(input, cmd->command, strlen(cmd->command)) == 0) {
+			char args[50];
+
+			// TODO: Handle spaces properly
+			int len = strlen(input) - strlen(cmd->command) - 1;
+			strncpy(args, input + strlen(cmd->command) + 1, len);
+			args[len-1] = '\0';
+			context->args = args;
+
 			cmd->handler(context); // Invoke handler
 			handled = true;
 			break;
