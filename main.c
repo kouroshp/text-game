@@ -9,6 +9,7 @@
 #include "command.h"
 #include "vector.h"
 #include "context.h"
+#include "utilities.h"
 
 void handle_input(char* input, vector_t* commands, context_t* context);
 
@@ -56,12 +57,7 @@ void handle_input(char* input, vector_t* commands, context_t* context) {
 		command_t* cmd = (command_t*)vector_get(commands, i);
 
 		if(strncmp(input, cmd->command, strlen(cmd->command)) == 0) {
-			char args[50];
-
-			// TODO: Handle spaces properly
-			int len = strlen(input) - strlen(cmd->command) - 1;
-			strncpy(args, input + strlen(cmd->command) + 1, len);
-			args[len-1] = '\0';
+			vector_t* args = explode(input, " ");
 			context->args = args;
 
 			cmd->handler(context); // Invoke handler

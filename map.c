@@ -11,16 +11,26 @@ void add_map_commands(vector_t* commands) {
 }
 
 void map_move_handler(context_t* context) {
-	if(strncmp(context->args, "forward", strlen("forward")) == 0) {
+	char* direction;
+
+	// Direction should be second argument
+	if(context->args->size > 1) {
+		direction = context->args->data[1];
+	}
+	else {
+		direction = "forward";
+	}
+
+	if(strncmp(direction, "forward", strlen("forward")) == 0) {
 		context->player->position.y += 1;
 	}
-	else if(strncmp(context->args, "backward", strlen("backward")) == 0) {
+	else if(strncmp(direction, "backward", strlen("backward")) == 0) {
 		context->player->position.y -= 1;
 	}
-	else if(strncmp(context->args, "left", strlen("left")) == 0) {
+	else if(strncmp(direction, "left", strlen("left")) == 0) {
 		context->player->position.x -= 1;
 	}
-	else if(strncmp(context->args, "right", strlen("right")) == 0) {
+	else if(strncmp(direction, "right", strlen("right")) == 0) {
 		context->player->position.x += 1;
 	}
 }
