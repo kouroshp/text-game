@@ -16,6 +16,7 @@ void list_add(list_t* list, void* element) {
 	// If list is empty, set the begin to new node
 	if (list->begin == NULL) {
 		list->begin = node;
+		list->size += 1;
 	}
 	else {
 		node_t* last = list->end;
@@ -64,4 +65,13 @@ void list_remove(list_t* list, int index) {
 	// Remove node
 	free(curr);
 	list->size -= 1;
+}
+
+void list_each(list_t* list, void (*function)(void* data)) {
+	node_t* node = list->begin;
+
+	for (int i = 0; i < list->size; i++) {
+		function(node->data);
+		node = node->next;
+	}
 }

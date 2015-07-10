@@ -16,5 +16,6 @@ void list_init(list_t* list);
 void list_add(list_t* list, void* element);
 node_t* list_get(list_t* list, int index);
 void list_remove(list_t* list, int index);
+void list_each(list_t* list, void (*function)(void* data));
 
 #endif
