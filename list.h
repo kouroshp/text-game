@@ -1,21 +1,21 @@
 #ifndef LIST_H
 #define LIST_H
 
-typedef struct node {
+struct node {
 	void* data;
 	struct node* next;
-} node_t;
+};
 
-typedef struct {
-	node_t* begin;
-	node_t* end;
+struct list {
+	struct node* begin;
+	struct node* end;
 	int size;
-} list_t;
+};
 
-void list_init(list_t* list);
-void list_add(list_t* list, void* element);
-node_t* list_get(list_t* list, int index);
-void list_remove(list_t* list, int index);
-void list_each(list_t* list, void (*function)(void* data));
+void list_init(struct list* list);
+void list_add(struct list* list, void* element);
+struct node* list_get(struct list* list, int index);
+void list_remove(struct list* list, int index);
+void list_each(struct list* list, void (*function)(void* data));
 
 #endif

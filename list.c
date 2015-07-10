@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include "list.h"
 
-void list_init(list_t* list) {
+void list_init(struct list* list) {
 	list->begin = NULL;
 	list->end = NULL;
 	list->size = 0;
 }
 
-void list_add(list_t* list, void* element) {
-	node_t* node = malloc(sizeof(node_t));
+void list_add(struct list* list, void* element) {
+	struct node* node = malloc(sizeof(struct node));
 	node->data = element;
 	node->next = NULL;
 
@@ -19,7 +19,7 @@ void list_add(list_t* list, void* element) {
 		list->size += 1;
 	}
 	else {
-		node_t* last = list->end;
+		struct node* last = list->end;
 		last->next = node;
 		list->size += 1;
 	}
@@ -28,13 +28,13 @@ void list_add(list_t* list, void* element) {
 	list->end = node;
 }
 
-node_t* list_get(list_t* list, int index) {
+struct node* list_get(struct list* list, int index) {
 	// If requesting last node, just return it
 	if (index == list->size) {
 		return list->end;
 	}
 
-	node_t* node = list->begin;
+	struct node* node = list->begin;
 
 	for (int i = 0; i < index - 1; i++) {
 		if(i < list->size) {
@@ -48,14 +48,14 @@ node_t* list_get(list_t* list, int index) {
 	return node;
 }
 
-void list_remove(list_t* list, int index) {
+void list_remove(struct list* list, int index) {
 	// Get node prior to one to remove
-	node_t* prev = list_get(list, index - 1);
-	node_t* curr = prev->next;
+	struct node* prev = list_get(list, index - 1);
+	struct node* curr = prev->next;
 
 	// Update links
 	if (index < list->size) {
-		node_t* next = curr->next;
+		struct node* next = curr->next;
 		prev->next = next;
 	}
 	else {
@@ -67,8 +67,8 @@ void list_remove(list_t* list, int index) {
 	list->size -= 1;
 }
 
-void list_each(list_t* list, void (*function)(void* data)) {
-	node_t* node = list->begin;
+void list_each(struct list* list, void (*function)(void* data)) {
+	struct node* node = list->begin;
 
 	for (int i = 0; i < list->size; i++) {
 		function(node->data);

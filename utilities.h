@@ -3,6 +3,6 @@
 
 #include "vector.h"
 
-vector_t* explode(char* str, char* c);
+struct vector* explode(char* str, char* c);
 
 #endif

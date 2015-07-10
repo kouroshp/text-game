@@ -7,15 +7,15 @@
 #include "vector.h"
 #include "command.h"
 
-void inventory_init(inventory_t* inventory) {
+void inventory_init(struct inventory* inventory) {
 	inventory->size = 0;
 	inventory->capacity = 10;
 
-	inventory->contents = malloc(sizeof(list_t));
+	inventory->contents = malloc(sizeof(struct list));
 	list_init(inventory->contents);
 }
 
-bool inventory_add(inventory_t* inventory, item_t* item) {
+bool inventory_add(struct inventory* inventory, struct item* item) {
 	if (inventory->size + item->weight <= inventory->capacity) {
 		list_add(inventory->contents, item);
 		inventory->size += item->weight;
@@ -24,13 +24,13 @@ bool inventory_add(inventory_t* inventory, item_t* item) {
 	return false;
 }
 
-void inventory_remove(inventory_t* inventory, int index) {
+void inventory_remove(struct inventory* inventory, int index) {
 	// Probably not very efficient
-	item_t* item = inventory_get(inventory, index);
+	struct item* item = inventory_get(inventory, index);
 	inventory->size -= item->weight;
 	list_remove(inventory->contents, index);
 }
 
-item_t* inventory_get(inventory_t* inventory, int index) {
-	return (item_t*)list_get(inventory->contents, index)->data;
+struct item* inventory_get(struct inventory* inventory, int index) {
+	return (struct item*)list_get(inventory->contents, index)->data;
 }

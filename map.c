@@ -5,12 +5,12 @@
 #include "context.h"
 #include "position.h"
 
-void add_map_commands(vector_t* commands) {
+void add_map_commands(struct vector* commands) {
 	command_add(commands, "move", &map_move_handler);
 	command_add(commands, "where", &map_where_handler);
 }
 
-void map_move_handler(context_t* context) {
+void map_move_handler(struct context* context) {
 	char* direction;
 
 	// Direction should be second argument
@@ -35,6 +35,6 @@ void map_move_handler(context_t* context) {
 	}
 }
 
-void map_where_handler(context_t* context) {
+void map_where_handler(struct context* context) {
 	printf("You are at %d, %d\n", context->player->position.x, context->player->position.y);
 }

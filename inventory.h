@@ -6,16 +6,15 @@
 #include "list.h"
 #include "vector.h"
 
-typedef struct
-{
+struct inventory {
 	int size;
 	int capacity;
-	list_t* contents;
-} inventory_t;
+	struct list* contents;
+};
 
-void inventory_init(inventory_t* inventory);
-bool inventory_add(inventory_t* inventory, item_t* item);
-void inventory_remove(inventory_t* inventory, int index);
-item_t* inventory_get(inventory_t* inventory, int index);
+void inventory_init(struct inventory* inventory);
+bool inventory_add(struct inventory* inventory, struct item* item);
+void inventory_remove(struct inventory* inventory, int index);
+struct item* inventory_get(struct inventory* inventory, int index);
 
 #endif

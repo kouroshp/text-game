@@ -4,10 +4,10 @@
 #include "vector.h"
 #include "person.h"
 
-typedef struct {
-	person_t* player;
+struct context {
+	struct person* player;
 	void* map[10][10];
-	vector_t* args;
-} context_t;
+	struct vector* args;
+};
 
 #endif

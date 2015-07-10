@@ -2,8 +2,8 @@
 #include "vector.h"
 #include "context.h"
 
-void command_add(vector_t* commands, char* command, void (*handler)(context_t* context)) {
-	command_t* cmd = malloc(sizeof(command_t));
+void command_add(struct vector* commands, char* command, void (*handler)(struct context* context)) {
+	struct command* cmd = malloc(sizeof(struct command));
 	cmd->command = command;
 	cmd->handler = handler;
 	vector_add(commands, cmd);

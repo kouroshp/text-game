@@ -1,8 +1,8 @@
 #include "utilities.h"
 #include "string.h"
 
-vector_t* explode(char* str, char* c) {
-	vector_t* tokens = malloc(sizeof(vector_t*));
+struct vector* explode(char* str, char* c) {
+	struct vector* tokens = malloc(sizeof(struct vector*));
 	vector_init(tokens, sizeof(char*));
 
 	char* token = strtok(str, c);

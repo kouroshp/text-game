@@ -11,16 +11,16 @@
 #include "context.h"
 #include "utilities.h"
 
-void handle_input(char* input, vector_t* commands, context_t* context);
+void handle_input(char* input, struct vector* commands, struct context* context);
 
 int main(void) {
 	// Initialise commands
-	vector_t commands;
-	vector_init(&commands, sizeof(command_t*));
+	struct vector commands;
+	vector_init(&commands, sizeof(struct command*));
 	add_map_commands(&commands);
 	
 	// Initialise player
-	person_t player;
+	struct person player;
 	char name[50];
 	printf("What is your name?\n> ");
 	fgets(name, sizeof(name), stdin);
@@ -29,7 +29,7 @@ int main(void) {
 	printf("Hello, %s!\n", player.name);
 
 	// Initialise game context
-	context_t context;
+	struct context context;
 	context.player = &player;
 
 	// Main game loop
@@ -45,7 +45,7 @@ int main(void) {
 	return 0;
 }
 
-void handle_input(char* input, vector_t* commands, context_t* context) {
+void handle_input(char* input, struct vector* commands, struct context* context) {
 	bool handled = false;
 
 	// Exit handler
@@ -54,10 +54,10 @@ void handle_input(char* input, vector_t* commands, context_t* context) {
 	}
 	// Process command
 	for (int i = 0; i < commands->size; i++) {
-		command_t* cmd = (command_t*)vector_get(commands, i);
+		struct command* cmd = (struct command*)vector_get(commands, i);
 
 		if(strncmp(input, cmd->command, strlen(cmd->command)) == 0) {
-			vector_t* args = explode(input, " ");
+			struct vector* args = explode(input, " ");
 			context->args = args;
 
 			cmd->handler(context); // Invoke handler

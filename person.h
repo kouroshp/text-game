@@ -4,12 +4,12 @@
 #include "position.h"
 #include "inventory.h"
 
-typedef struct {
+struct person {
 	char* name;
-	inventory_t* inventory;
-	position_t position;
-} person_t;
+	struct inventory* inventory;
+	struct position position;
+};
 
-void person_init(person_t* person, char* name);
+void person_init(struct person* person, char* name);
 
 #endif

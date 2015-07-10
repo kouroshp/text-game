@@ -4,11 +4,11 @@
 #include "vector.h"
 #include "context.h"
 
-typedef struct {
+struct command {
 	char* command;
-	void (*handler)(context_t* context);
-} command_t;
+	void (*handler)(struct context* context);
+};
 
-void command_add(vector_t* commands, char* command, void (*handler)(context_t* context));
+void command_add(struct vector* commands, char* command, void (*handler)(struct context* context));
 
 #endif
