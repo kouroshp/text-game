@@ -18,13 +18,14 @@ int main(void) {
 	struct vector commands;
 	vector_init(&commands, sizeof(struct command*));
 	add_map_commands(&commands);
+	inventory_commands_add(&commands);
 	
 	// Initialise player
 	struct person player;
 	char name[50];
 	printf("What is your name?\n> ");
 	fgets(name, sizeof(name), stdin);
-	name[strcspn(name, "\n")] = 0; // Remove trailing newline
+	remove_newline(name);
 	person_init(&player, name);
 	printf("Hello, %s!\n", player.name);
 
