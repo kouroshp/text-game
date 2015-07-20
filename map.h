@@ -4,8 +4,8 @@
 #include "vector.h"
 #include "context.h"
 
-void add_map_commands(struct vector* commands);
-void map_move_handler(struct context* context);
-void map_where_handler(struct context* context);
+void map_commands_add(struct vector* commands);
+void map_handler_move(struct context* context);
+void map_handler_where(struct context* context);
 
 #endif

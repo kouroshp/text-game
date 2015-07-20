@@ -2,13 +2,15 @@
 #include <stdlib.h>
 #include "list.h"
 
-void list_init(struct list* list) {
+void list_init(struct list* list) 
+{
 	list->begin = NULL;
 	list->end = NULL;
 	list->size = 0;
 }
 
-void list_add(struct list* list, void* element) {
+void list_add(struct list* list, void* element) 
+{
 	struct node* node = malloc(sizeof(struct node));
 	node->data = element;
 	node->next = NULL;
@@ -28,7 +30,8 @@ void list_add(struct list* list, void* element) {
 	list->end = node;
 }
 
-struct node* list_get(struct list* list, int index) {
+struct node* list_get(struct list* list, int index) 
+{
 	// If requesting last node, just return it
 	if (index == list->size) {
 		return list->end;
@@ -37,7 +40,7 @@ struct node* list_get(struct list* list, int index) {
 	struct node* node = list->begin;
 
 	for (int i = 0; i < index - 1; i++) {
-		if(i < list->size) {
+		if (i < list->size) {
 			node = node->next;
 		}
 		else {
@@ -48,7 +51,8 @@ struct node* list_get(struct list* list, int index) {
 	return node;
 }
 
-void list_remove(struct list* list, int index) {
+void list_remove(struct list* list, int index) 
+{
 	// Get node prior to one to remove
 	struct node* prev = list_get(list, index - 1);
 	struct node* curr = prev->next;
@@ -67,7 +71,8 @@ void list_remove(struct list* list, int index) {
 	list->size -= 1;
 }
 
-void list_each(struct list* list, void (*function)(void* data)) {
+void list_each(struct list* list, void (*function)(void* data)) 
+{
 	struct node* node = list->begin;
 
 	for (int i = 0; i < list->size; i++) {

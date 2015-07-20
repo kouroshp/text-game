@@ -13,11 +13,12 @@
 
 void handle_input(char* input, struct vector* commands, struct context* context);
 
-int main(void) {
+int main(void) 
+{
 	// Initialise commands
 	struct vector commands;
 	vector_init(&commands, sizeof(struct command*));
-	add_map_commands(&commands);
+	map_commands_add(&commands);
 	inventory_commands_add(&commands);
 	
 	// Initialise player
@@ -46,18 +47,19 @@ int main(void) {
 	return 0;
 }
 
-void handle_input(char* input, struct vector* commands, struct context* context) {
+void handle_input(char* input, struct vector* commands, struct context* context) 
+{
 	bool handled = false;
 
 	// Exit handler
-	if(strncmp(input, "exit", strlen("exit")) == 0) {
+	if (strncmp(input, "exit", strlen("exit")) == 0) {
 		exit(0);
 	}
 	// Process command
 	for (int i = 0; i < commands->size; i++) {
 		struct command* cmd = (struct command*)vector_get(commands, i);
 
-		if(strncmp(input, cmd->command, strlen(cmd->command)) == 0) {
+		if (strncmp(input, cmd->command, strlen(cmd->command)) == 0) {
 			struct vector* args = explode(input, " ");
 			context->args = args;
 

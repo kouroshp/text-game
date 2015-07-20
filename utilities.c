@@ -1,7 +1,8 @@
 #include <string.h>
 #include "utilities.h"
 
-struct vector* explode(char* str, char* c) {
+struct vector* explode(char* str, char* c) 
+{
 	struct vector* tokens = malloc(sizeof(struct vector));
 	vector_init(tokens, sizeof(char*));
 
@@ -16,6 +17,7 @@ struct vector* explode(char* str, char* c) {
 	return tokens;
 }
 
-void remove_newline(char* str) {
+void remove_newline(char* str) 
+{
 	str[strcspn(str, "\n")] = 0;
 }

@@ -9,7 +9,8 @@
 #include "command.h"
 #include "context.h"
 
-void inventory_init(struct inventory* inventory) {
+void inventory_init(struct inventory* inventory) 
+{
 	inventory->size = 0;
 	inventory->capacity = 10;
 
@@ -17,7 +18,8 @@ void inventory_init(struct inventory* inventory) {
 	list_init(inventory->contents);
 }
 
-bool inventory_add(struct inventory* inventory, struct item* item) {
+bool inventory_add(struct inventory* inventory, struct item* item) 
+{
 	if (inventory->size + item->weight <= inventory->capacity) {
 		list_add(inventory->contents, item);
 		inventory->size += item->weight;
@@ -26,14 +28,16 @@ bool inventory_add(struct inventory* inventory, struct item* item) {
 	return false;
 }
 
-void inventory_remove(struct inventory* inventory, int index) {
+void inventory_remove(struct inventory* inventory, int index) 
+{
 	// Probably not very efficient
 	struct item* item = inventory_get(inventory, index);
 	inventory->size -= item->weight;
 	list_remove(inventory->contents, index);
 }
 
-struct item* inventory_get(struct inventory* inventory, int index) {
+struct item* inventory_get(struct inventory* inventory, int index) 
+{
 	return (struct item*)list_get(inventory->contents, index)->data;
 }
 
@@ -41,7 +45,8 @@ void inventory_item_print(void* data) {
 	printf("%s\n", ((struct item*)data)->name);
 }
 
-void inventory_contents_print(struct inventory* inventory) {
+void inventory_contents_print(struct inventory* inventory) 
+{
 	if (inventory->size == 0) {
 		printf("Inventory is empty!\n");
 		return;
@@ -50,16 +55,19 @@ void inventory_contents_print(struct inventory* inventory) {
 	list_each(inventory->contents, &inventory_item_print);
 }
 
-void inventory_commands_add(struct vector* commands) {
+void inventory_commands_add(struct vector* commands) 
+{
 	command_add(commands, "inventory", &inventory_handler_show);
 	command_add(commands, "pickup", &inventory_handler_pickup);
 }
 
-void inventory_handler_show(struct context* context) {
+void inventory_handler_show(struct context* context) 
+{
 	inventory_contents_print(context->player->inventory);
 }
 
-void inventory_handler_pickup(struct context* context) {
+void inventory_handler_pickup(struct context* context) 
+{
 	if (context->args->size == 1) {
 		printf("Pick up what?\n");
 		return;

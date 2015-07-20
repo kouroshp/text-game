@@ -13,6 +13,8 @@ struct inventory {
 	struct list* contents;
 };
 
+struct context;
+
 void inventory_init(struct inventory* inventory);
 bool inventory_add(struct inventory* inventory, struct item* item);
 void inventory_remove(struct inventory* inventory, int index);
