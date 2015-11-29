@@ -16,5 +16,6 @@ void vector_init(struct vector* vector, size_t element_size);
 void vector_add(struct vector* vector, void* element);
 void* vector_get(struct vector* vector, int index);
 void vector_resize(struct vector* vector);
+void vector_free(struct vector* vector);
 
 #endif

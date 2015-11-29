@@ -13,62 +13,69 @@
 
 void handle_input(char* input, struct vector* commands, struct context* context);
 
-int main(void) 
+int main(void)
 {
-	// Initialise commands
-	struct vector commands;
-	vector_init(&commands, sizeof(struct command*));
-	map_commands_add(&commands);
-	inventory_commands_add(&commands);
-	
-	// Initialise player
-	struct person player;
-	char name[50];
-	printf("What is your name?\n> ");
-	fgets(name, sizeof(name), stdin);
-	remove_newline(name);
-	person_init(&player, name);
-	printf("Hello, %s!\n", player.name);
+    // Initialise commands
+    struct vector commands;
+    vector_init(&commands, sizeof(struct command*));
+    map_commands_add(&commands);
+    inventory_commands_add(&commands);
 
-	// Initialise game context
-	struct context context;
-	context.player = &player;
+    // Initialise player
+    struct person player;
+    char name[50];
+    printf("What is your name?\n> ");
+    fgets(name, sizeof(name), stdin);
+    remove_newline(name);
+    person_init(&player, name);
+    printf("Hello, %s!\n", player.name);
 
-	// Main game loop
-	char input[50];
+    // Initialise game context
+    struct context context;
+    context.player = &player;
 
-	while (true) {
-		printf("> ");
-		fgets(input, sizeof(input), stdin);
+    // Main game loop
+    char input[50];
 
-		handle_input(input, &commands, &context);
-	}
+    while (true) {
+        printf("> ");
+        fgets(input, sizeof(input), stdin);
 
-	return 0;
+        handle_input(input, &commands, &context);
+    }
+
+    return 0;
 }
 
-void handle_input(char* input, struct vector* commands, struct context* context) 
+void handle_input(char* input, struct vector* commands, struct context* context)
 {
-	bool handled = false;
+    bool handled = false;
 
-	// Exit handler
-	if (strncmp(input, "exit", strlen("exit")) == 0) {
-		exit(0);
-	}
-	// Process command
-	for (int i = 0; i < commands->size; i++) {
-		struct command* cmd = (struct command*)vector_get(commands, i);
+    // Exit handler
+    if (strncmp(input, "exit", strlen("exit")) == 0) {
+        exit(0);
+    }
+    // Process command
+    for (int i = 0; i < commands->size; i++) {
+        struct command* cmd = (struct command*)vector_get(commands, i);
 
-		if (strncmp(input, cmd->command, strlen(cmd->command)) == 0) {
-			struct vector* args = explode(input, " ");
-			context->args = args;
+        if (strncmp(input, cmd->command, strlen(cmd->command)) == 0) {
+            // Get arguments
+            struct vector* args = explode(input, " ");
+            context->args = args;
 
-			cmd->handler(context); // Invoke handler
-			handled = true;
-			break;
-		}
-	}
-	if (!handled) {
-		printf("I don't understand that!\n");
-	}
+            // Invoke handler
+            cmd->handler(context);
+            handled = true;
+
+            // Clean up
+            vector_free(args);
+            free(args);
+
+            break;
+        }
+    }
+    if (!handled) {
+        printf("I don't understand that!\n");
+    }
 }
