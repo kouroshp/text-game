@@ -11,5 +11,5 @@ struct person {
 };
 
 void person_init(struct person* person, char* name);
-
+void person_free(struct person* person);
 #endif

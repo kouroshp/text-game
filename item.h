@@ -6,4 +6,6 @@ struct item {
 	int weight;
 };
 
+void item_free(struct item* item);
+
 #endif

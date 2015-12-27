@@ -40,6 +40,8 @@ void vector_resize(struct vector* vector)
 
 void vector_free(struct vector* vector)
 {
-    // Assume each element is allocated on the stack so we don't need to free them
+    for (int i = 0; i < vector->size; i++) {
+        free(vector->data[i]);
+    }
     free(vector->data);
 }

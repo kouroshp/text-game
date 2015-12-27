@@ -11,7 +11,7 @@
 #include "context.h"
 #include "utilities.h"
 
-void handle_input(char* input, struct vector* commands, struct context* context);
+int handle_input(char* input, struct vector* commands, struct context* context);
 
 int main(void)
 {
@@ -40,20 +40,25 @@ int main(void)
     while (true) {
         printf("> ");
         fgets(input, sizeof(input), stdin);
-
-        handle_input(input, &commands, &context);
+        if (handle_input(input, &commands, &context) > 0) {
+            break;
+        }
     }
+
+    // Clean up
+    person_free(&player);
+    vector_free(&commands);
 
     return 0;
 }
 
-void handle_input(char* input, struct vector* commands, struct context* context)
+int handle_input(char* input, struct vector* commands, struct context* context)
 {
     bool handled = false;
 
     // Exit handler
     if (strncmp(input, "exit", strlen("exit")) == 0) {
-        exit(0);
+        return 1;
     }
     // Process command
     for (int i = 0; i < commands->size; i++) {
@@ -69,7 +74,7 @@ void handle_input(char* input, struct vector* commands, struct context* context)
             handled = true;
 
             // Clean up
-            vector_free(args);
+            free(args->data);
             free(args);
 
             break;
@@ -78,4 +83,6 @@ void handle_input(char* input, struct vector* commands, struct context* context)
     if (!handled) {
         printf("I don't understand that!\n");
     }
+
+    return 0;
 }
