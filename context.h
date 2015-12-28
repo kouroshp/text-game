@@ -3,11 +3,12 @@
 
 #include "vector.h"
 #include "person.h"
+#include "location.h"
 
 struct context {
-	struct person* player;
-	void* map[10][10];
-	struct vector* args;
+    struct person* player;
+    struct location* map[10][10];
+    struct vector* args;
 };
 
 #endif

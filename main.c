@@ -33,6 +33,7 @@ int main(void)
     // Initialise game context
     struct context context;
     context.player = &player;
+    map_init(&context);
 
     // Main game loop
     char input[50];
@@ -48,6 +49,7 @@ int main(void)
     // Clean up
     person_free(&player);
     vector_free(&commands);
+    map_free(&context);
 
     return 0;
 }
