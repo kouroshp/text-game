@@ -16,36 +16,33 @@ void list_add(struct list* list, void* element)
     node->next = NULL;
 
     // If list is empty, set the begin to new node
-    if (list->begin == NULL) {
+    if (list->size == 0) {
         list->begin = node;
-        list->size += 1;
     }
     else {
         struct node* last = list->end;
         last->next = node;
-        list->size += 1;
     }
 
-    // Update last item to point to latest addition
+    list->size += 1;
     list->end = node;
 }
 
 struct node* list_get(struct list* list, int index)
 {
+    if (list->size == 0 || index < 0 || index > list->size - 1) {
+        return NULL;
+    }
+
     // If requesting last node, just return it
-    if (index == list->size) {
+    if (index == list->size - 1) {
         return list->end;
     }
 
     struct node* node = list->begin;
 
-    for (int i = 0; i < index - 1; i++) {
-        if (i < list->size) {
-            node = node->next;
-        }
-        else {
-            return node;
-        }
+    for (int i = 0; i < index; i++) {
+        node = node->next;
     }
 
     return node;
@@ -53,17 +50,33 @@ struct node* list_get(struct list* list, int index)
 
 void list_remove(struct list* list, int index)
 {
-    // Get node prior to one to remove
-    struct node* prev = list_get(list, index - 1);
-    struct node* curr = prev->next;
+    struct node* curr;
+    struct node* prev;
 
-    // Update links
-    if (index < list->size) {
-        struct node* next = curr->next;
-        prev->next = next;
+    if (list->size == 0 || index < 0 || index > list->size - 1) {
+        return;
+    }
+
+    if (index == 0) {
+        curr = list->begin;
+        if (curr->next != NULL) {
+            list->begin = curr->next;
+        }
     }
     else {
-        prev->next = NULL;
+        // Get node prior to one to remove
+        prev = list_get(list, index - 1);
+        curr = prev->next;
+
+        // Update links
+        if (curr == list->end) {
+            prev->next = NULL;
+            list->end = prev;
+        }
+        else {
+            struct node* next = curr->next;
+            prev->next = next;
+        }
     }
 
     // Remove node
@@ -92,9 +105,11 @@ void list_free(struct list* list)
 
         for (int i = 0; i < list->size - 1; i++) {
             next = curr->next;
+            free(curr->data);
             free(curr);
             curr = next;
         }
+        free(curr->data);
         free(curr);
     }
 }

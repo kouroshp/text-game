@@ -28,17 +28,30 @@ bool inventory_add(struct inventory* inventory, struct item* item)
     return false;
 }
 
-void inventory_remove(struct inventory* inventory, int index)
+bool inventory_remove(struct inventory* inventory, int index)
 {
     // Probably not very efficient
     struct item* item = inventory_get(inventory, index);
+
+    if (item == NULL) {
+        return false;
+    }
+
     inventory->size -= item->weight;
     list_remove(inventory->contents, index);
+
+    return true;
 }
 
 struct item* inventory_get(struct inventory* inventory, int index)
 {
-    return (struct item*)list_get(inventory->contents, index)->data;
+    struct node* node = list_get(inventory->contents, index);
+
+    if (node != NULL) {
+        return (struct item*)node->data;
+    }
+
+    return NULL;
 }
 
 void inventory_item_print(void* data) {
@@ -59,6 +72,7 @@ void inventory_commands_add(struct vector* commands)
 {
     command_add(commands, "inventory", &inventory_handler_show);
     command_add(commands, "pickup", &inventory_handler_pickup);
+    command_add(commands, "drop", &inventory_handler_drop);
 }
 
 void inventory_handler_show(struct context* context)
@@ -76,9 +90,25 @@ void inventory_handler_pickup(struct context* context)
     struct item* item = malloc(sizeof(struct item));
     item->name = malloc(sizeof(context->args->data[1]));
     memcpy(item->name, context->args->data[1], sizeof(context->args->data[1]));
-
     item->weight = 1;
-    inventory_add(context->player->inventory, item);
+
+    if (!inventory_add(context->player->inventory, item)) {
+        printf("Your inventory is full!");
+        item_free(item);
+        free(item);
+    }
+}
+
+void inventory_handler_drop(struct context* context)
+{
+    if (context->args->size == 1) {
+        printf("Drop what?\n");
+        return;
+    }
+
+    if (!inventory_remove(context->player->inventory, atoi(context->args->data[1]))) {
+        printf("You don't have that in your inventory...\n");
+    }
 }
 
 void inventory_free(struct inventory* inventory)
