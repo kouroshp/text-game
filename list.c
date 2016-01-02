@@ -94,6 +94,16 @@ void list_each(struct list* list, void (*function)(void* data))
     }
 }
 
+void list_each_with_index(struct list* list, void (*function)(int index, void* data))
+{
+    struct node* node = list->begin;
+
+    for (int i = 0; i < list->size; i++) {
+        function(i, node->data);
+        node = node->next;
+    }
+}
+
 void list_free(struct list* list)
 {
     if (list->size == 0) {

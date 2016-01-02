@@ -22,7 +22,7 @@ struct item* inventory_get(struct inventory* inventory, int index);
 void inventory_free(struct inventory* inventory);
 void inventory_item_free(void* item);
 
-void inventory_item_print(void* data);
+void inventory_item_print(int index, void* data);
 void inventory_contents_print(struct inventory* inventory);
 
 void inventory_commands_add(struct vector* commands);

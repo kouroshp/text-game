@@ -17,6 +17,7 @@ void list_add(struct list* list, void* element);
 struct node* list_get(struct list* list, int index);
 void list_remove(struct list* list, int index);
 void list_each(struct list* list, void (*function)(void* data));
+void list_each_with_index(struct list* list, void (*function)(int index, void* data));
 void list_free(struct list* list);
 
 #endif

@@ -54,8 +54,8 @@ struct item* inventory_get(struct inventory* inventory, int index)
     return NULL;
 }
 
-void inventory_item_print(void* data) {
-    printf("%s\n", ((struct item*)data)->name);
+void inventory_item_print(int index, void* data) {
+    printf("[%d] %s\n", index, ((struct item*)data)->name);
 }
 
 void inventory_contents_print(struct inventory* inventory)
@@ -65,7 +65,7 @@ void inventory_contents_print(struct inventory* inventory)
         return;
     }
 
-    list_each(inventory->contents, &inventory_item_print);
+    list_each_with_index(inventory->contents, &inventory_item_print);
 }
 
 void inventory_commands_add(struct vector* commands)
