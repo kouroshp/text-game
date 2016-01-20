@@ -3,13 +3,16 @@
 
 #include "position.h"
 #include "inventory.h"
+#include "location.h"
 
 struct person {
-	char* name;
-	struct inventory* inventory;
-	struct position position;
+    char* name;
+    struct inventory* inventory;
+    struct position position;
+    int health;
 };
 
 void person_init(struct person* person, char* name);
 void person_free(struct person* person);
+
 #endif

@@ -5,6 +5,7 @@
 #include "context.h"
 #include "position.h"
 #include "location.h"
+#include "inventory.h"
 
 void map_init(struct context* context)
 {
@@ -15,7 +16,11 @@ void map_init(struct context* context)
     }
 
     struct location* house = malloc(sizeof(struct location));
-    house->description = "a dark ominous dwelling, old and forgotten.";
+    location_init(house, "Shack", "a dark ominous dwelling, old and forgotten.");
+    struct item* key = malloc(sizeof(struct item));
+    key->name = "Iron Key";
+    key->weight = 1;
+    inventory_add(house->inventory, key);
     context->map[1][1] = house;
 }
 
@@ -34,6 +39,7 @@ void map_commands_add(struct vector* commands)
 {
     command_add(commands, "move", &map_handler_move);
     command_add(commands, "where", &map_handler_where);
+    command_add(commands, "look", &map_handler_look);
 }
 
 void map_handler_move(struct context* context)
@@ -71,5 +77,20 @@ void map_handler_where(struct context* context)
     }
     else {
         printf("You are nowhere...\n");
+    }
+}
+
+void map_handler_look(struct context* context)
+{
+    struct location* location = context->map[context->player->position.x][context->player->position.y];
+
+    if (location != NULL) {
+        if (location->inventory->size > 0) {
+            printf("You see something in the darkness...\n");
+            inventory_contents_print(location->inventory);
+        }
+        if (location->people->size == 0) {
+            printf("There is no one here...\n");
+        }
     }
 }
