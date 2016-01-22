@@ -10,6 +10,7 @@
 #include "vector.h"
 #include "context.h"
 #include "utilities.h"
+#include "handlers.h"
 
 int handle_input(char* input, struct vector* commands, struct context* context);
 
@@ -21,19 +22,15 @@ int main(void)
     map_commands_add(&commands);
     inventory_commands_add(&commands);
 
-    // Initialise player
-    struct person player;
+    // Initialise game context
+    struct context context;
+    map_init(&context);
     char name[50];
     printf("What is your name?\n> ");
     fgets(name, sizeof(name), stdin);
     remove_newline(name);
-    person_init(&player, name);
-    printf("Hello, %s!\n", player.name);
-
-    // Initialise game context
-    struct context context;
-    context.player = &player;
-    map_init(&context);
+    person_init(&context.player, name);
+    printf("Hello, %s!\n", context.player.name);
 
     // Main game loop
     char input[50];
@@ -47,7 +44,6 @@ int main(void)
     }
 
     // Clean up
-    person_free(&player);
     vector_free(&commands);
     map_free(&context);
 

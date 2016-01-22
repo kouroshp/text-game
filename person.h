@@ -3,11 +3,10 @@
 
 #include "position.h"
 #include "inventory.h"
-#include "location.h"
 
 struct person {
     char* name;
-    struct inventory* inventory;
+    struct inventory inventory;
     struct position position;
     int health;
 };
