@@ -27,15 +27,22 @@ void inventory_handler_pickup(struct context* context)
         return;
     }
 
-    struct item* item = malloc(sizeof(struct item));
-    item->name = malloc(sizeof(context->args->data[1]));
-    memcpy(item->name, context->args->data[1], sizeof(context->args->data[1]));
-    item->weight = 1;
+    struct location* location = context->map[context->player.position.x][context->player.position.y];
+    if (location == NULL || (location != NULL && location->inventory.size == 0)) {
+        printf("There is nothing here to pick up...\n");
+        return;
+    }
 
-    if (!inventory_add(&context->player.inventory, item)) {
-        printf("Your inventory is full!");
-        item_free(item);
-        free(item);
+    struct item* item = inventory_get(&location->inventory, atoi(context->args->data[1]));
+    if (item != NULL) {
+        if (!inventory_add(&context->player.inventory, item)) {
+            printf("Your inventory is full!\n");
+            return;
+        }
+        inventory_remove(&location->inventory, atoi(context->args->data[1]));
+    }
+    else {
+        printf("You can't pick up that...\n");
     }
 }
 
@@ -46,9 +53,20 @@ void inventory_handler_drop(struct context* context)
         return;
     }
 
-    if (!inventory_remove(&context->player.inventory, atoi(context->args->data[1]))) {
+    struct item* item = inventory_get(&context->player.inventory, atoi(context->args->data[1]));
+    if (item == NULL) {
         printf("You don't have that in your inventory...\n");
+        return;
     }
+
+    struct location* location = context->map[context->player.position.x][context->player.position.y];
+    if (location == NULL || (location != NULL && location->inventory.size + item->weight > location->inventory.capacity)) {
+        printf("You can't drop anything here...\n");
+        return;
+    }
+
+    inventory_add(&location->inventory, item);
+    inventory_remove(&context->player.inventory, atoi(context->args->data[1]));
 }
 
 void map_commands_add(struct vector* commands)

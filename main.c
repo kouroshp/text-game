@@ -44,20 +44,20 @@ int main(void)
     }
 
     // Clean up
-    vector_free(&commands);
+    person_free(&context.player);
     map_free(&context);
+    vector_free(&commands);
 
     return 0;
 }
 
 int handle_input(char* input, struct vector* commands, struct context* context)
 {
-    bool handled = false;
-
     // Exit handler
     if (strncmp(input, "exit", strlen("exit")) == 0) {
         return 1;
     }
+
     // Process command
     for (int i = 0; i < commands->size; i++) {
         struct command* cmd = (struct command*)vector_get(commands, i);
@@ -69,18 +69,15 @@ int handle_input(char* input, struct vector* commands, struct context* context)
 
             // Invoke handler
             cmd->handler(context);
-            handled = true;
 
             // Clean up
             free(args->data);
             free(args);
 
-            break;
+            return 0;
         }
     }
-    if (!handled) {
-        printf("I don't understand that!\n");
-    }
 
+    printf("I don't understand that!\n");
     return 0;
 }

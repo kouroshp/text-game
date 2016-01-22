@@ -64,11 +64,5 @@ void inventory_contents_print(struct inventory* inventory)
 
 void inventory_free(struct inventory* inventory)
 {
-    list_each(&inventory->contents, &inventory_item_free);
     list_free(&inventory->contents);
-}
-
-void inventory_item_free(void* item)
-{
-    item_free((struct item*)item);
 }
