@@ -9,6 +9,7 @@ struct person {
     struct inventory inventory;
     struct position position;
     int health;
+    struct item* weapon;
 };
 
 void person_init(struct person* person, char* name);

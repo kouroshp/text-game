@@ -19,8 +19,7 @@ int main(void)
     // Initialise commands
     struct vector commands;
     vector_init(&commands, sizeof(struct command*));
-    map_commands_add(&commands);
-    inventory_commands_add(&commands);
+    handlers_init(&commands);
 
     // Initialise game context
     struct context context;

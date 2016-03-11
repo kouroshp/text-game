@@ -8,11 +8,16 @@
 #include "inventory.h"
 #include "map.h"
 
-void inventory_commands_add(struct vector* commands)
+void handlers_init(struct vector* commands)
 {
     command_add(commands, "inventory", &inventory_handler_show);
     command_add(commands, "pickup", &inventory_handler_pickup);
     command_add(commands, "drop", &inventory_handler_drop);
+    command_add(commands, "attack", &player_handler_attack);
+    command_add(commands, "equip", &player_handler_equip);
+    command_add(commands, "move", &map_handler_move);
+    command_add(commands, "where", &map_handler_where);
+    command_add(commands, "look", &map_handler_look);
 }
 
 void inventory_handler_show(struct context* context)
@@ -69,13 +74,6 @@ void inventory_handler_drop(struct context* context)
     inventory_remove(&context->player.inventory, atoi(context->args->data[1]));
 }
 
-void map_commands_add(struct vector* commands)
-{
-    command_add(commands, "move", &map_handler_move);
-    command_add(commands, "where", &map_handler_where);
-    command_add(commands, "look", &map_handler_look);
-}
-
 void map_handler_move(struct context* context)
 {
     char* direction;
@@ -127,4 +125,25 @@ void map_handler_look(struct context* context)
             printf("There is no one here...\n");
         }
     }
+}
+
+void player_handler_attack(struct context* context)
+{
+    struct item* weapon = context->player.weapon;
+
+    if (weapon == NULL) {
+        printf("You do not have a weapon equipped...\n");
+        return;
+    }
+    if (weapon->type != WEAPON) {
+        printf("You can't attack someone with a %s...\n", weapon->name);
+        return;
+    }
+    printf("You attack with your %s causing %d damage\n", weapon->name, weapon->damage);
+}
+
+void player_handler_equip(struct context* context)
+{
+    struct item* item = inventory_get(&context->player.inventory, atoi(context->args->data[1]));
+    context->player.weapon = item;
 }
