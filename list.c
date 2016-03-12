@@ -2,16 +2,16 @@
 #include <stdlib.h>
 #include "list.h"
 
-void list_init(struct list* list)
+void list_init(struct list *list)
 {
     list->begin = NULL;
     list->end = NULL;
     list->size = 0;
 }
 
-void list_add(struct list* list, void* element)
+void list_add(struct list *list, void *element)
 {
-    struct node* node = malloc(sizeof(struct node));
+    struct node *node = malloc(sizeof(*node));
     node->data = element;
     node->next = NULL;
 
@@ -20,7 +20,7 @@ void list_add(struct list* list, void* element)
         list->begin = node;
     }
     else {
-        struct node* last = list->end;
+        struct node *last = list->end;
         last->next = node;
     }
 
@@ -28,7 +28,7 @@ void list_add(struct list* list, void* element)
     list->end = node;
 }
 
-struct node* list_get(struct list* list, int index)
+struct node *list_get(struct list *list, int index)
 {
     if (list->size == 0 || index < 0 || index > list->size - 1) {
         return NULL;
@@ -39,7 +39,7 @@ struct node* list_get(struct list* list, int index)
         return list->end;
     }
 
-    struct node* node = list->begin;
+    struct node *node = list->begin;
 
     for (int i = 0; i < index; i++) {
         node = node->next;
@@ -48,10 +48,10 @@ struct node* list_get(struct list* list, int index)
     return node;
 }
 
-void list_remove(struct list* list, int index)
+void list_remove(struct list *list, int index)
 {
-    struct node* curr;
-    struct node* prev;
+    struct node *curr;
+    struct node *prev;
 
     if (list->size == 0 || index < 0 || index > list->size - 1) {
         return;
@@ -74,7 +74,7 @@ void list_remove(struct list* list, int index)
             list->end = prev;
         }
         else {
-            struct node* next = curr->next;
+            struct node *next = curr->next;
             prev->next = next;
         }
     }
@@ -84,9 +84,9 @@ void list_remove(struct list* list, int index)
     list->size -= 1;
 }
 
-void list_each(struct list* list, void (*function)(void* data))
+void list_each(struct list *list, void (*function)(void *data))
 {
-    struct node* node = list->begin;
+    struct node *node = list->begin;
 
     for (int i = 0; i < list->size; i++) {
         function(node->data);
@@ -94,9 +94,9 @@ void list_each(struct list* list, void (*function)(void* data))
     }
 }
 
-void list_each_with_index(struct list* list, void (*function)(int index, void* data))
+void list_each_with_index(struct list *list, void (*function)(int index, void *data))
 {
-    struct node* node = list->begin;
+    struct node *node = list->begin;
 
     for (int i = 0; i < list->size; i++) {
         function(i, node->data);
@@ -104,14 +104,14 @@ void list_each_with_index(struct list* list, void (*function)(int index, void* d
     }
 }
 
-void list_free(struct list* list)
+void list_free(struct list *list)
 {
     if (list->size == 0) {
         return;
     }
     else {
-        struct node* curr = list->begin;
-        struct node* next;
+        struct node *curr = list->begin;
+        struct node *next;
 
         for (int i = 0; i < list->size - 1; i++) {
             next = curr->next;

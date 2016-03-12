@@ -2,7 +2,7 @@
 #include "person.h"
 #include "inventory.h"
 
-void person_init(struct person* person, char* name)
+void person_init(struct person *person, char *name)
 {
     person->name = name;
     inventory_init(&person->inventory);
@@ -12,7 +12,7 @@ void person_init(struct person* person, char* name)
     person->weapon = NULL;
 }
 
-void person_free(struct person* person)
+void person_free(struct person *person)
 {
     inventory_free(&person->inventory);
 }

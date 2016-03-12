@@ -12,13 +12,13 @@
 #include "utilities.h"
 #include "handlers.h"
 
-int handle_input(char* input, struct vector* commands, struct context* context);
+static int handle_input(char *input, struct vector *commands, struct context *context);
 
 int main(void)
 {
     // Initialise commands
     struct vector commands;
-    vector_init(&commands, sizeof(struct command*));
+    vector_init(&commands, sizeof(struct command *));
     handlers_init(&commands);
 
     // Initialise game context
@@ -50,7 +50,7 @@ int main(void)
     return 0;
 }
 
-int handle_input(char* input, struct vector* commands, struct context* context)
+static int handle_input(char *input, struct vector *commands, struct context *context)
 {
     // Exit handler
     if (strncmp(input, "exit", strlen("exit")) == 0) {
@@ -59,11 +59,11 @@ int handle_input(char* input, struct vector* commands, struct context* context)
 
     // Process command
     for (int i = 0; i < commands->size; i++) {
-        struct command* cmd = (struct command*)vector_get(commands, i);
+        struct command *cmd = (struct command *)vector_get(commands, i);
 
         if (strncmp(input, cmd->command, strlen(cmd->command)) == 0) {
             // Get arguments
-            struct vector* args = explode(input, " ");
+            struct vector *args = explode(input, " ");
             context->args = args;
 
             // Invoke handler

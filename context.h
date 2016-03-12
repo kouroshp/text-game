@@ -7,8 +7,8 @@
 
 struct context {
     struct person player;
-    struct location* map[10][10];
-    struct vector* args;
+    struct location *map[10][10];
+    struct vector *args;
 };
 
 #endif

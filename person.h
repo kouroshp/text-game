@@ -5,14 +5,14 @@
 #include "inventory.h"
 
 struct person {
-    char* name;
+    char *name;
     struct inventory inventory;
     struct position position;
     int health;
-    struct item* weapon;
+    struct item *weapon;
 };
 
-void person_init(struct person* person, char* name);
-void person_free(struct person* person);
+void person_init(struct person *person, char *name);
+void person_free(struct person *person);
 
 #endif

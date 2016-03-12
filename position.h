@@ -2,8 +2,8 @@
 #define POSITION_H
 
 struct position {
-	int x;
-	int y;
+    int x;
+    int y;
 };
 
 #endif

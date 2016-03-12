@@ -4,14 +4,16 @@
 #include "item.h"
 #include "inventory.h"
 
-void inventory_init(struct inventory* inventory)
+static void inventory_item_print(int index, void *data);
+
+void inventory_init(struct inventory *inventory)
 {
     inventory->size = 0;
     inventory->capacity = 10;
     list_init(&inventory->contents);
 }
 
-bool inventory_add(struct inventory* inventory, struct item* item)
+bool inventory_add(struct inventory *inventory, struct item *item)
 {
     if (inventory->size + item->weight <= inventory->capacity) {
         list_add(&inventory->contents, item);
@@ -21,10 +23,10 @@ bool inventory_add(struct inventory* inventory, struct item* item)
     return false;
 }
 
-bool inventory_remove(struct inventory* inventory, int index)
+bool inventory_remove(struct inventory *inventory, int index)
 {
     // Probably not very efficient
-    struct item* item = inventory_get(inventory, index);
+    struct item *item = inventory_get(inventory, index);
 
     if (item == NULL) {
         return false;
@@ -36,22 +38,22 @@ bool inventory_remove(struct inventory* inventory, int index)
     return true;
 }
 
-struct item* inventory_get(struct inventory* inventory, int index)
+struct item *inventory_get(struct inventory *inventory, int index)
 {
-    struct node* node = list_get(&inventory->contents, index);
+    struct node *node = list_get(&inventory->contents, index);
 
     if (node != NULL) {
-        return (struct item*)node->data;
+        return (struct item *)node->data;
     }
 
     return NULL;
 }
 
-void inventory_item_print(int index, void* data) {
-    printf("[%d] %s\n", index, ((struct item*)data)->name);
+static void inventory_item_print(int index, void *data) {
+    printf("[%d] %s\n", index, ((struct item *)data)->name);
 }
 
-void inventory_contents_print(struct inventory* inventory)
+void inventory_contents_print(struct inventory *inventory)
 {
     if (inventory->size == 0) {
         printf("Inventory is empty!\n");
@@ -62,7 +64,7 @@ void inventory_contents_print(struct inventory* inventory)
 }
 
 
-void inventory_free(struct inventory* inventory)
+void inventory_free(struct inventory *inventory)
 {
     list_free(&inventory->contents);
 }

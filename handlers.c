@@ -8,7 +8,7 @@
 #include "inventory.h"
 #include "map.h"
 
-void handlers_init(struct vector* commands)
+void handlers_init(struct vector *commands)
 {
     command_add(commands, "inventory", &inventory_handler_show);
     command_add(commands, "pickup", &inventory_handler_pickup);
@@ -20,25 +20,25 @@ void handlers_init(struct vector* commands)
     command_add(commands, "look", &map_handler_look);
 }
 
-void inventory_handler_show(struct context* context)
+void inventory_handler_show(struct context *context)
 {
     inventory_contents_print(&context->player.inventory);
 }
 
-void inventory_handler_pickup(struct context* context)
+void inventory_handler_pickup(struct context *context)
 {
     if (context->args->size == 1) {
         printf("Pick up what?\n");
         return;
     }
 
-    struct location* location = context->map[context->player.position.x][context->player.position.y];
+    struct location *location = context->map[context->player.position.x][context->player.position.y];
     if (location == NULL || (location != NULL && location->inventory.size == 0)) {
         printf("There is nothing here to pick up...\n");
         return;
     }
 
-    struct item* item = inventory_get(&location->inventory, atoi(context->args->data[1]));
+    struct item *item = inventory_get(&location->inventory, atoi(context->args->data[1]));
     if (item != NULL) {
         if (!inventory_add(&context->player.inventory, item)) {
             printf("Your inventory is full!\n");
@@ -51,20 +51,20 @@ void inventory_handler_pickup(struct context* context)
     }
 }
 
-void inventory_handler_drop(struct context* context)
+void inventory_handler_drop(struct context *context)
 {
     if (context->args->size == 1) {
         printf("Drop what?\n");
         return;
     }
 
-    struct item* item = inventory_get(&context->player.inventory, atoi(context->args->data[1]));
+    struct item *item = inventory_get(&context->player.inventory, atoi(context->args->data[1]));
     if (item == NULL) {
         printf("You don't have that in your inventory...\n");
         return;
     }
 
-    struct location* location = context->map[context->player.position.x][context->player.position.y];
+    struct location *location = context->map[context->player.position.x][context->player.position.y];
     if (location == NULL || (location != NULL && location->inventory.size + item->weight > location->inventory.capacity)) {
         printf("You can't drop anything here...\n");
         return;
@@ -74,9 +74,9 @@ void inventory_handler_drop(struct context* context)
     inventory_remove(&context->player.inventory, atoi(context->args->data[1]));
 }
 
-void map_handler_move(struct context* context)
+void map_handler_move(struct context *context)
 {
-    char* direction;
+    char *direction;
 
     // Direction should be second argument
     if (context->args->size > 1) {
@@ -100,9 +100,9 @@ void map_handler_move(struct context* context)
     }
 }
 
-void map_handler_where(struct context* context)
+void map_handler_where(struct context *context)
 {
-    struct location* location = context->map[context->player.position.x][context->player.position.y];
+    struct location *location = context->map[context->player.position.x][context->player.position.y];
 
     if (location != NULL) {
         printf("You are at %s\n", location->description);
@@ -112,9 +112,9 @@ void map_handler_where(struct context* context)
     }
 }
 
-void map_handler_look(struct context* context)
+void map_handler_look(struct context *context)
 {
-    struct location* location = context->map[context->player.position.x][context->player.position.y];
+    struct location *location = context->map[context->player.position.x][context->player.position.y];
 
     if (location != NULL) {
         if (location->inventory.size > 0) {
@@ -127,9 +127,9 @@ void map_handler_look(struct context* context)
     }
 }
 
-void player_handler_attack(struct context* context)
+void player_handler_attack(struct context *context)
 {
-    struct item* weapon = context->player.weapon;
+    struct item *weapon = context->player.weapon;
 
     if (weapon == NULL) {
         printf("You do not have a weapon equipped...\n");
@@ -142,8 +142,8 @@ void player_handler_attack(struct context* context)
     printf("You attack with your %s causing %d damage\n", weapon->name, weapon->damage);
 }
 
-void player_handler_equip(struct context* context)
+void player_handler_equip(struct context *context)
 {
-    struct item* item = inventory_get(&context->player.inventory, atoi(context->args->data[1]));
+    struct item *item = inventory_get(&context->player.inventory, atoi(context->args->data[1]));
     context->player.weapon = item;
 }
