@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 #include "vector.h"
 
 static void vector_resize(struct vector *vector);
@@ -20,6 +21,18 @@ void vector_add(struct vector *vector, void *element)
 
     vector->data[vector->size] = element;
     vector->size++;
+}
+
+bool vector_remove(struct vector *vector, int index)
+{
+    if (index < 0 || index > vector->size) {
+        return false;
+    }
+    for (int i = index; i < vector->size - 1; i++) {
+        vector->data[i] = vector->data[i + 1];
+    }
+    vector->size--;
+    return true;
 }
 
 void *vector_get(struct vector *vector, int index)
