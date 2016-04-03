@@ -131,7 +131,14 @@ void map_handler_look(struct context *context)
             printf("You see something in the darkness...\n");
             inventory_contents_print(&location->inventory);
         }
-        if (location->people.size == 0) {
+        if (location->people.size > 0) {
+            printf("There is someone here...\n");
+            for (int i = 0; i < location->people.size; i++) {
+                struct person *p = vector_get(&location->people, i);
+                printf("%s\n", p->name);
+            }
+        }
+        else {
             printf("There is no one here...\n");
         }
     }
@@ -139,6 +146,32 @@ void map_handler_look(struct context *context)
 
 void player_handler_attack(struct context *context)
 {
+    if (context->args->size == 1) {
+        printf("Attack who?\n");
+        return;
+    }
+
+    struct location *location = context->map[context->player.position.x][context->player.position.y];
+    if (location == NULL) {
+        printf("There is no one here...\n");
+        return;
+    }
+
+    struct person *person = NULL;
+
+    for (int i = 0; i < location->people.size; i++) {
+        struct person *p = vector_get(&location->people, i);
+        if (strncmp(p->name, context->args->data[1], strlen(p->name)) == 0) {
+            person = p;
+            break;
+        }
+    }
+
+    if (person == NULL) {
+        printf("There's no one here with that name...\n");
+        return;
+    }
+
     struct item *weapon = context->player.weapon;
 
     if (weapon == NULL) {
@@ -149,7 +182,10 @@ void player_handler_attack(struct context *context)
         printf("You can't attack someone with a %s...\n", weapon->description);
         return;
     }
-    printf("You attack with your %s causing %d damage\n", weapon->description, weapon->damage);
+
+    person->health -= weapon->damage;
+    printf("You attack %s with your %s causing %d damage\n", person->name, weapon->description, weapon->damage);
+    printf("%s's health is now %d\n", person->name, person->health);
 }
 
 void player_handler_equip(struct context *context)

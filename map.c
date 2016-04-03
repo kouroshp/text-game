@@ -17,6 +17,9 @@ void map_init(struct context *context)
     struct item *dagger = item_weapon_new("dagger", "Iron Dagger", 3, 5);
     inventory_add(&house->inventory, key);
     inventory_add(&house->inventory, dagger);
+    struct person *george = malloc(sizeof(*george));
+    person_init(george, "George");
+    vector_add(&house->people, george);
     context->map[1][1] = house;
 }
 
