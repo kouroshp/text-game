@@ -53,7 +53,8 @@ int main(void)
 static int handle_input(char *input, struct vector *commands, struct context *context)
 {
     // Exit handler
-    if (strncmp(input, "exit", strlen("exit")) == 0) {
+    if (strncmp(input, "exit", strlen("exit")) == 0 ||
+        strncmp(input, "quit", strlen("quit")) == 0) {
         return 1;
     }
 
