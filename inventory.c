@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 #include "list.h"
 #include "item.h"
 #include "inventory.h"
 
-static void inventory_item_print(int index, void *data);
+static bool name_comparer(void *data, char *arg);
+static void item_print(void *data);
+static void item_free(void *data);
 
 void inventory_init(struct inventory *inventory)
 {
@@ -23,34 +27,25 @@ bool inventory_add(struct inventory *inventory, struct item *item)
     return false;
 }
 
-bool inventory_remove(struct inventory *inventory, int index)
+struct item *inventory_remove(struct inventory *inventory, char *name)
 {
-    // Probably not very efficient
-    struct item *item = inventory_get(inventory, index);
-
-    if (item == NULL) {
-        return false;
+    void *data = list_find_and_remove(&inventory->contents, &name_comparer, name);
+    if (data == NULL) {
+        return NULL;
     }
 
+    struct item *item = (struct item *)data;
     inventory->size -= item->weight;
-    list_remove(&inventory->contents, index);
-
-    return true;
+    return item;
 }
 
-struct item *inventory_get(struct inventory *inventory, int index)
+struct item *inventory_get(struct inventory *inventory, char *name)
 {
-    struct node *node = list_get(&inventory->contents, index);
-
-    if (node != NULL) {
-        return (struct item *)node->data;
+    void *data = list_find(&inventory->contents, &name_comparer, name);
+    if (data == NULL) {
+        return NULL;
     }
-
-    return NULL;
-}
-
-static void inventory_item_print(int index, void *data) {
-    printf("[%d] %s\n", index, ((struct item *)data)->name);
+    return (struct item *)data;
 }
 
 void inventory_contents_print(struct inventory *inventory)
@@ -60,11 +55,32 @@ void inventory_contents_print(struct inventory *inventory)
         return;
     }
 
-    list_each_with_index(&inventory->contents, &inventory_item_print);
+    list_each(&inventory->contents, &item_print);
 }
-
 
 void inventory_free(struct inventory *inventory)
 {
+    list_each(&inventory->contents, &item_free);
     list_free(&inventory->contents);
+}
+
+static bool name_comparer(void *data, char *arg)
+{
+    struct item *item = (struct item *)data;
+
+    if (strncmp(item->name, arg, strlen(item->name)) == 0) {
+        return true;
+    }
+    return false;
+}
+
+static void item_print(void *data)
+{
+    struct item *item = (struct item *)data;
+    printf("%s [%s]\n", item->description, item->name);
+}
+
+static void item_free(void *data)
+{
+    free(data);
 }

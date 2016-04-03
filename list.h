@@ -1,10 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 
-struct node {
-    void *data;
-    struct node *next;
-};
+#include <stdbool.h>
 
 struct list {
     struct node *begin;
@@ -14,10 +11,11 @@ struct list {
 
 void list_init(struct list *list);
 void list_add(struct list *list, void *element);
-struct node *list_get(struct list *list, int index);
-void list_remove(struct list *list, int index);
+void *list_get(struct list *list, int index);
+void *list_find(struct list *list, bool (*compare)(void *data, char *arg), char *arg);
+void *list_remove(struct list *list, int index);
+void *list_find_and_remove(struct list *list, bool (*compare)(void *data, char *arg), char *arg);
 void list_each(struct list *list, void (*function)(void *data));
-void list_each_with_index(struct list *list, void (*function)(int index, void *data));
 void list_free(struct list *list);
 
 #endif

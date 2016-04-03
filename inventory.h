@@ -13,8 +13,8 @@ struct inventory {
 
 void inventory_init(struct inventory *inventory);
 bool inventory_add(struct inventory *inventory, struct item *item);
-bool inventory_remove(struct inventory *inventory, int index);
-struct item *inventory_get(struct inventory *inventory, int index);
+struct item *inventory_remove(struct inventory *inventory, char *name);
+struct item *inventory_get(struct inventory *inventory, char *name);
 void inventory_free(struct inventory *inventory);
 void inventory_contents_print(struct inventory *inventory);
 

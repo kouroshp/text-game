@@ -13,8 +13,8 @@ void map_init(struct context *context)
 
     struct location *house = malloc(sizeof(*house));
     location_init(house, "Shack", "a dark ominous dwelling, old and forgotten.");
-    struct item *key = item_object_new("Iron Key", 1);
-    struct item *dagger = item_weapon_new("Iron Dagger", 3, 5);
+    struct item *key = item_object_new("key", "Iron Key", 1);
+    struct item *dagger = item_weapon_new("dagger", "Iron Dagger", 3, 5);
     inventory_add(&house->inventory, key);
     inventory_add(&house->inventory, dagger);
     context->map[1][1] = house;
