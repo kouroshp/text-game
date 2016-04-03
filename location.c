@@ -13,7 +13,7 @@ void location_init(struct location *location, char *name, char *description)
 void location_free(struct location *location)
 {
     for (int i = 0; i < location->people.size; i++) {
-        person_free(location->people.data[i]);
+        person_free(vector_get(&location->people, i));
     }
 
     vector_free(&location->people);
