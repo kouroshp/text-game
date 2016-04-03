@@ -45,6 +45,7 @@ int main(void)
     // Clean up
     person_free(&context.player);
     map_free(&context);
+    handlers_free(&commands);
     vector_free(&commands);
 
     return 0;

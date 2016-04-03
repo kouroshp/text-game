@@ -5,6 +5,7 @@
 #include "vector.h"
 
 void handlers_init(struct vector *commands);
+void handlers_free(struct vector *commands);
 void map_handler_move(struct context *context);
 void map_handler_where(struct context *context);
 void map_handler_look(struct context *context);

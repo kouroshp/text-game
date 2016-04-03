@@ -20,6 +20,13 @@ void handlers_init(struct vector *commands)
     command_add(commands, "look", &map_handler_look);
 }
 
+void handlers_free(struct vector *commands)
+{
+    for (int i = 0; i < commands->size; i++) {
+        free(vector_get(commands, i));
+    }
+}
+
 void inventory_handler_show(struct context *context)
 {
     inventory_contents_print(&context->player.inventory);

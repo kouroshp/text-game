@@ -55,8 +55,5 @@ static void vector_resize(struct vector *vector)
 
 void vector_free(struct vector *vector)
 {
-    for (int i = 0; i < vector->size; i++) {
-        free(vector->data[i]);
-    }
     free(vector->data);
 }
