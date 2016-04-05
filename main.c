@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "linenoise.h"
 #include "item.h"
 #include "inventory.h"
 #include "map.h"
@@ -24,26 +25,27 @@ int main(void)
     // Initialise game context
     struct context context;
     map_init(&context);
-    char name[50];
-    printf("What is your name?\n> ");
-    fgets(name, sizeof(name), stdin);
-    remove_newline(name);
+    char *name;
+    printf("What is your name?\n");
+    name = linenoise("> ");
     person_init(&context.player, name);
     printf("Hello, %s!\n", context.player.name);
 
     // Main game loop
-    char input[50];
+    char *input;
 
-    while (true) {
-        printf("> ");
-        fgets(input, sizeof(input), stdin);
+    while ((input = linenoise("> ")) != NULL) {
+        linenoiseHistoryAdd(input);
         if (handle_input(input, &commands, &context) > 0) {
+            free(input);
             break;
         }
+        free(input);
     }
 
     // Clean up
     person_free(&context.player);
+    free(name);
     map_free(&context);
     handlers_free(&commands);
     vector_free(&commands);
