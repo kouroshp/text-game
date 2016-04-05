@@ -1,17 +1,17 @@
 #include <string.h>
 #include "utilities.h"
 
-struct vector *explode(char *str, char *c)
+struct vector *strsplit(char *str, char *sep)
 {
     struct vector *tokens = malloc(sizeof(*tokens));
     vector_init(tokens, sizeof(char *));
 
-    char *token = strtok(str, c);
+    char *token = strtok(str, sep);
 
     while (token != NULL) {
         remove_newline(token);
         vector_add(tokens, token);
-        token = strtok(NULL, c);
+        token = strtok(NULL, sep);
     }
 
     return tokens;

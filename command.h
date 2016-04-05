@@ -6,9 +6,9 @@
 
 struct command {
     char *command;
-    void (*handler)(struct context *context);
+    void (*handler)(struct vector *args, struct context *context);
 };
 
-void command_add(struct vector *commands, char *command, void (*handler)(struct context *context));
+void command_add(struct vector *commands, char *command, void (*handler)(struct vector *args, struct context *context));
 
 #endif

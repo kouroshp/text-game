@@ -67,11 +67,10 @@ static int handle_input(char *input, struct vector *commands, struct context *co
 
         if (strncmp(input, cmd->command, strlen(cmd->command)) == 0) {
             // Get arguments
-            struct vector *args = explode(input, " ");
-            context->args = args;
+            struct vector *args = strsplit(input, " ");
 
             // Invoke handler
-            cmd->handler(context);
+            cmd->handler(args, context);
 
             // Clean up
             free(args->data);

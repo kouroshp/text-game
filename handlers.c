@@ -27,14 +27,14 @@ void handlers_free(struct vector *commands)
     }
 }
 
-void inventory_handler_show(struct context *context)
+void inventory_handler_show(struct vector *args, struct context *context)
 {
     inventory_contents_print(&context->player.inventory);
 }
 
-void inventory_handler_pickup(struct context *context)
+void inventory_handler_pickup(struct vector *args, struct context *context)
 {
-    if (context->args->size == 1) {
+    if (args->size == 1) {
         printf("Pick up what?\n");
         return;
     }
@@ -46,7 +46,7 @@ void inventory_handler_pickup(struct context *context)
     }
 
     // Pick up item from location's inventory
-    struct item *item = inventory_remove(&location->inventory, context->args->data[1]);
+    struct item *item = inventory_remove(&location->inventory, vector_get(args, 1));
     if (item != NULL) {
         if (!inventory_add(&context->player.inventory, item)) {
             printf("Your inventory is full!\n");
@@ -60,14 +60,14 @@ void inventory_handler_pickup(struct context *context)
     }
 }
 
-void inventory_handler_drop(struct context *context)
+void inventory_handler_drop(struct vector *args, struct context *context)
 {
-    if (context->args->size == 1) {
+    if (args->size == 1) {
         printf("Drop what?\n");
         return;
     }
 
-    struct item *item = inventory_remove(&context->player.inventory, context->args->data[1]);
+    struct item *item = inventory_remove(&context->player.inventory, vector_get(args, 1));
     if (item == NULL) {
         printf("You don't have that in your inventory...\n");
         return;
@@ -84,13 +84,13 @@ void inventory_handler_drop(struct context *context)
     inventory_add(&location->inventory, item);
 }
 
-void map_handler_move(struct context *context)
+void map_handler_move(struct vector *args, struct context *context)
 {
     char *direction;
 
     // Direction should be second argument
-    if (context->args->size > 1) {
-        direction = context->args->data[1];
+    if (args->size > 1) {
+        direction = vector_get(args, 1);
     }
     else {
         direction = "forward";
@@ -110,7 +110,7 @@ void map_handler_move(struct context *context)
     }
 }
 
-void map_handler_where(struct context *context)
+void map_handler_where(struct vector *args, struct context *context)
 {
     struct location *location = context->map[context->player.position.x][context->player.position.y];
 
@@ -122,7 +122,7 @@ void map_handler_where(struct context *context)
     }
 }
 
-void map_handler_look(struct context *context)
+void map_handler_look(struct vector *args, struct context *context)
 {
     struct location *location = context->map[context->player.position.x][context->player.position.y];
 
@@ -144,9 +144,9 @@ void map_handler_look(struct context *context)
     }
 }
 
-void player_handler_attack(struct context *context)
+void player_handler_attack(struct vector *args, struct context *context)
 {
-    if (context->args->size == 1) {
+    if (args->size == 1) {
         printf("Attack who?\n");
         return;
     }
@@ -161,7 +161,7 @@ void player_handler_attack(struct context *context)
 
     for (int i = 0; i < location->people.size; i++) {
         struct person *p = vector_get(&location->people, i);
-        if (strncmp(p->name, context->args->data[1], strlen(p->name)) == 0) {
+        if (strncmp(p->name, vector_get(args, 1), strlen(p->name)) == 0) {
             person = p;
             break;
         }
@@ -188,8 +188,8 @@ void player_handler_attack(struct context *context)
     printf("%s's health is now %d\n", person->name, person->health);
 }
 
-void player_handler_equip(struct context *context)
+void player_handler_equip(struct vector *args, struct context *context)
 {
-    struct item *item = inventory_get(&context->player.inventory, context->args->data[1]);
+    struct item *item = inventory_get(&context->player.inventory, vector_get(args, 1));
     context->player.weapon = item;
 }

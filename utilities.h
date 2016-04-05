@@ -3,7 +3,7 @@
 
 #include "vector.h"
 
-struct vector *explode(char *str, char *c);
+struct vector *strsplit(char *str, char *sep);
 void remove_newline(char *str);
 
 #endif
