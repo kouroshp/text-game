@@ -63,7 +63,7 @@ static int handle_input(char *input, struct vector *commands, struct context *co
 
     // Process command
     for (int i = 0; i < commands->size; i++) {
-        struct command *cmd = (struct command *)vector_get(commands, i);
+        struct command *cmd = vector_get(commands, i);
 
         if (strncmp(input, cmd->command, strlen(cmd->command)) == 0) {
             // Get arguments

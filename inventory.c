@@ -29,23 +29,18 @@ bool inventory_add(struct inventory *inventory, struct item *item)
 
 struct item *inventory_remove(struct inventory *inventory, char *name)
 {
-    void *data = list_find_and_remove(&inventory->contents, &name_comparer, name);
-    if (data == NULL) {
+    struct item *item = list_find_and_remove(&inventory->contents, &name_comparer, name);
+    if (item == NULL) {
         return NULL;
     }
 
-    struct item *item = (struct item *)data;
     inventory->size -= item->weight;
     return item;
 }
 
 struct item *inventory_get(struct inventory *inventory, char *name)
 {
-    void *data = list_find(&inventory->contents, &name_comparer, name);
-    if (data == NULL) {
-        return NULL;
-    }
-    return (struct item *)data;
+    return list_find(&inventory->contents, &name_comparer, name);
 }
 
 void inventory_contents_print(struct inventory *inventory)
@@ -66,7 +61,7 @@ void inventory_free(struct inventory *inventory)
 
 static bool name_comparer(void *data, char *arg)
 {
-    struct item *item = (struct item *)data;
+    struct item *item = data;
 
     if (strncmp(item->name, arg, strlen(item->name)) == 0) {
         return true;
@@ -76,7 +71,7 @@ static bool name_comparer(void *data, char *arg)
 
 static void item_print(void *data)
 {
-    struct item *item = (struct item *)data;
+    struct item *item = data;
     printf("%s [%s]\n", item->description, item->name);
 }
 
