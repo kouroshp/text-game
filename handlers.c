@@ -183,9 +183,19 @@ void player_handler_attack(struct vector *args, struct context *context)
         return;
     }
 
+    if (person->health <= 0) {
+        printf("%s is already dead...\n", person->name);
+        return;
+    }
+
     person->health -= weapon->damage;
-    printf("You attack %s with your %s causing %d damage\n", person->name, weapon->description, weapon->damage);
-    printf("%s's health is now %d\n", person->name, person->health);
+    if (person->health <= 0) {
+        printf("You have killed %s\n", person->name);
+    }
+    else {
+        printf("You attack %s with your %s causing %d damage\n", person->name, weapon->description, weapon->damage);
+        printf("%s's health is now %d\n", person->name, person->health);
+    }
 }
 
 void player_handler_equip(struct vector *args, struct context *context)
