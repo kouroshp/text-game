@@ -20,6 +20,8 @@ void map_init(struct context *context)
     struct person *george = malloc(sizeof(*george));
     person_init(george, "George");
     vector_add(&house->people, george);
+    struct item *club = item_weapon_new("club", "Club", 8, 10);
+    george->weapon = club;
     context->map[1][1] = house;
 }
 

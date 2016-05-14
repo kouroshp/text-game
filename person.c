@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 #include "person.h"
 #include "inventory.h"
 
@@ -10,6 +11,7 @@ void person_init(struct person *person, char *name)
     person->position.y = 0;
     person->health = 100;
     person->weapon = NULL;
+    person->in_combat = false;
 }
 
 void person_free(struct person *person)

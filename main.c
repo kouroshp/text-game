@@ -55,12 +55,6 @@ int main(void)
 
 static int handle_input(char *input, struct vector *commands, struct context *context)
 {
-    // Exit handler
-    if (strncmp(input, "exit", strlen("exit")) == 0 ||
-        strncmp(input, "quit", strlen("quit")) == 0) {
-        return 1;
-    }
-
     // Process command
     for (int i = 0; i < commands->size; i++) {
         struct command *cmd = vector_get(commands, i);
@@ -70,7 +64,10 @@ static int handle_input(char *input, struct vector *commands, struct context *co
             struct vector *args = strsplit(input, " ");
 
             // Invoke handler
-            cmd->handler(args, context);
+            int result = cmd->handler(args, context);
+            if (result > 0) {
+                return 1;
+            }
 
             // Clean up
             free(args->data);

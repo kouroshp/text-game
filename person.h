@@ -1,6 +1,7 @@
 #ifndef PERSON_H
 #define PERSON_H
 
+#include <stdbool.h>
 #include "position.h"
 #include "inventory.h"
 
@@ -10,6 +11,7 @@ struct person {
     struct position position;
     int health;
     struct item *weapon;
+    bool in_combat;
 };
 
 void person_init(struct person *person, char *name);
