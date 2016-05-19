@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <strings.h>
 #include "handlers.h"
 #include "command.h"
 #include "context.h"
@@ -115,16 +116,16 @@ int map_handler_move(struct vector *args, struct context *context)
         direction = "forward";
     }
 
-    if (strncmp(direction, "forward", strlen("forward")) == 0) {
+    if (strncasecmp(direction, "forward", strlen("forward")) == 0) {
         context->player.position.y += 1;
     }
-    else if (strncmp(direction, "backward", strlen("backward")) == 0) {
+    else if (strncasecmp(direction, "backward", strlen("backward")) == 0) {
         context->player.position.y -= 1;
     }
-    else if (strncmp(direction, "left", strlen("left")) == 0) {
+    else if (strncasecmp(direction, "left", strlen("left")) == 0) {
         context->player.position.x -= 1;
     }
-    else if (strncmp(direction, "right", strlen("right")) == 0) {
+    else if (strncasecmp(direction, "right", strlen("right")) == 0) {
         context->player.position.x += 1;
     }
     return 0;
@@ -183,7 +184,7 @@ int player_handler_attack(struct vector *args, struct context *context)
 
     for (int i = 0; i < location->people.size; i++) {
         struct person *p = vector_get(&location->people, i);
-        if (strncmp(p->name, vector_get(args, 1), strlen(p->name)) == 0) {
+        if (strncasecmp(p->name, vector_get(args, 1), strlen(p->name)) == 0) {
             person = p;
             break;
         }

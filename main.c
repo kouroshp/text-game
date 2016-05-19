@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <strings.h>
 #include "linenoise.h"
 #include "item.h"
 #include "inventory.h"
@@ -59,7 +60,7 @@ static int handle_input(char *input, struct vector *commands, struct context *co
     for (int i = 0; i < commands->size; i++) {
         struct command *cmd = vector_get(commands, i);
 
-        if (strncmp(input, cmd->command, strlen(cmd->command)) == 0) {
+        if (strncasecmp(input, cmd->command, strlen(cmd->command)) == 0) {
             // Get arguments
             struct vector *args = strsplit(input, " ");
 
