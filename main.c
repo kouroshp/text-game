@@ -66,15 +66,12 @@ static int handle_input(char *input, struct vector *commands, struct context *co
 
             // Invoke handler
             int result = cmd->handler(args, context);
-            if (result > 0) {
-                return 1;
-            }
 
             // Clean up
             free(args->data);
             free(args);
 
-            return 0;
+            return result;
         }
     }
 
