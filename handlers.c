@@ -9,6 +9,8 @@
 #include "inventory.h"
 #include "map.h"
 
+static void move_player(struct context *context, int x, int y);
+
 void handlers_init(struct vector *commands)
 {
     command_add(commands, "exit", &handler_quit);
@@ -108,7 +110,6 @@ int map_handler_move(struct vector *args, struct context *context)
 
     char *direction;
 
-    // Direction should be second argument
     if (args->size > 1) {
         direction = vector_get(args, 1);
     }
@@ -117,17 +118,18 @@ int map_handler_move(struct vector *args, struct context *context)
     }
 
     if (strncasecmp(direction, "forward", strlen("forward")) == 0) {
-        context->player.position.y += 1;
+        move_player(context, 0, 1);
     }
     else if (strncasecmp(direction, "backward", strlen("backward")) == 0) {
-        context->player.position.y -= 1;
+        move_player(context, 0, -1);
     }
     else if (strncasecmp(direction, "left", strlen("left")) == 0) {
-        context->player.position.x -= 1;
+        move_player(context, -1, 0);
     }
     else if (strncasecmp(direction, "right", strlen("right")) == 0) {
-        context->player.position.x += 1;
+        move_player(context, 1, 0);
     }
+
     return 0;
 }
 
@@ -135,11 +137,11 @@ int map_handler_where(struct vector *args, struct context *context)
 {
     struct location *location = context->map[context->player.position.x][context->player.position.y];
 
-    if (location != NULL) {
-        printf("You are at %s\n", location->description);
+    if (location->area != NULL) {
+        printf("You are at %s\n", location->area->description);
     }
     else {
-        printf("You are nowhere...\n");
+        printf("You are outside.\n");
     }
     return 0;
 }
@@ -241,4 +243,20 @@ int player_handler_equip(struct vector *args, struct context *context)
     struct item *item = inventory_get(&context->player.inventory, vector_get(args, 1));
     context->player.weapon = item;
     return 0;
+}
+
+static void move_player(struct context *context, int x, int y)
+{
+    int px = context->player.position.x;
+    int py = context->player.position.y;
+    struct location *current  = context->map[px][py];
+    struct location *new = context->map[px + x][py + y];
+
+    if (current->area != NULL && new->area != current->area && !current->exit) {
+        printf("You can't walk through walls...\n");
+        return;
+    }
+
+    context->player.position.x += x;
+    context->player.position.y += y;
 }

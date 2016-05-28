@@ -1,11 +1,18 @@
 #include "location.h"
 #include "inventory.h"
 #include "person.h"
+#include <stdbool.h>
 
-void location_init(struct location *location, char *name, char *description)
+void area_init(struct area *area, char *name, char *description)
 {
-    location->name = name;
-    location->description = description;
+    area->name = name;
+    area->description = description;
+}
+
+void location_init(struct location *location)
+{
+    location->area = NULL;
+    location->exit = false;
     inventory_init(&location->inventory);
     vector_init(&location->people, sizeof(struct person *));
 }
