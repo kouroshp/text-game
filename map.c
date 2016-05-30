@@ -30,6 +30,7 @@ void map_init(struct context *context)
     person_init(george, "George");
     vector_add(&location->people, george);
     struct item *club = item_weapon_new("club", "Club", 8, 10);
+    inventory_add(&george->inventory, club);
     george->weapon = club;
 }
 
