@@ -138,7 +138,7 @@ int map_handler_where(struct vector *args, struct context *context)
     struct location *location = context->map[context->player.position.x][context->player.position.y];
 
     if (location->area != NULL) {
-        printf("You are at %s\n", location->area->description);
+        printf("You are in %s\n", location->area->description);
     }
     else {
         printf("You are outside.\n");

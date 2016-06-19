@@ -1,0 +1,85 @@
+[
+  {
+    "name": "Shack",
+    "description": "a dark ominous dwelling, old and forgotten." ,
+    "locations": [
+      {
+        "x": 1,
+        "y": 1,
+        "inventory": [
+          {
+            "type": "object",
+            "name": "key",
+            "description": "Iron Key",
+            "weight": 1
+          },
+          {
+            "type": "weapon",
+            "name": "dagger",
+            "description": "Iron Dagger",
+            "weight": 3,
+            "damage": 5
+          }
+        ],
+        "people": [
+          {
+            "name": "George",
+            "inventory": [
+              {
+                "type": "weapon",
+                "name": "club",
+                "description": "Club",
+                "weight": 8,
+                "damage": 10
+              }
+            ],
+            "weapon": "club"
+          }
+        ]
+      },
+      {
+        "x": 1,
+        "y": 2,
+        "inventory": [],
+        "people": []
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "inventory": [],
+        "people": []
+      },
+      {
+        "x": 2,
+        "y": 2,
+        "inventory": [],
+        "people": []
+      }
+    ]
+  },
+  {
+    "name": "Cave",
+    "description": "a dimly lit cave, a home to another person perhaps",
+    "locations": [
+      {
+        "x": 7,
+        "y": 8,
+        "inventory": [
+          {
+            "type": "weapon",
+            "name": "staff",
+            "description": "Arcane Staff",
+            "weight": 10,
+            "damage": 40
+          }
+        ],
+        "people": [
+          {
+            "name": "Trogdor",
+            "inventory": []
+          }
+        ]
+      }
+    ]
+  }
+]

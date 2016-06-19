@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <strings.h>
+#include <jansson.h>
 #include "linenoise.h"
 #include "item.h"
 #include "inventory.h"
@@ -18,14 +19,26 @@ static int handle_input(char *input, struct vector *commands, struct context *co
 
 int main(void)
 {
+    // Load game data
+    json_error_t error;
+    json_t *data = json_load_file("data.json", 0, &error);
+
+    if (!data) {
+        fprintf(stderr, "Error loading data: %s\n", error.text);
+        return 1;
+    }
+
+    // Initialise game context
+    struct context context;
+    map_init(&context, data);
+
     // Initialise commands
     struct vector commands;
     vector_init(&commands, sizeof(struct command *));
     handlers_init(&commands);
 
-    // Initialise game context
-    struct context context;
-    map_init(&context);
+    // Start game
+    linenoiseClearScreen();
     char *name;
     printf("What is your name?\n");
     name = linenoise("> ");
@@ -50,6 +63,7 @@ int main(void)
     map_free(&context);
     handlers_free(&commands);
     vector_free(&commands);
+    json_decref(data);
 
     return 0;
 }
