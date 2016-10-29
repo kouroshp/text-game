@@ -3,7 +3,7 @@
 #include "person.h"
 #include "inventory.h"
 
-void person_init(struct person *person, char *name)
+void person_init(struct person *person, const char *name)
 {
     person->name = name;
     inventory_init(&person->inventory);

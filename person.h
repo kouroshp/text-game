@@ -6,15 +6,15 @@
 #include "inventory.h"
 
 struct person {
-    char *name;
+    const char *name;
     struct inventory inventory;
     struct position position;
-    int health;
+    unsigned int health;
     struct item *weapon;
     bool in_combat;
 };
 
-void person_init(struct person *person, char *name);
+void person_init(struct person *person, const char *name);
 void person_free(struct person *person);
 
 #endif

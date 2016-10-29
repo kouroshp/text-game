@@ -6,8 +6,8 @@
 #include "vector.h"
 
 struct area {
-    char *name;
-    char *description;
+    const char *name;
+    const char *description;
 };
 
 struct location {
@@ -17,7 +17,7 @@ struct location {
     struct vector people;
 };
 
-void area_init(struct area *area, char *name, char *description);
+void area_init(struct area *area, const char *name, const char *description);
 void location_init(struct location *location);
 void location_free(struct location *location);
 

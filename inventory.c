@@ -6,7 +6,8 @@
 #include "item.h"
 #include "inventory.h"
 
-static bool name_comparer(void *data, char *arg);
+static bool name_finder(void *data, void *arg);
+static bool name_comparer(void *first, void *second);
 static void item_print(void *data);
 static void item_free(void *data);
 
@@ -27,9 +28,9 @@ bool inventory_add(struct inventory *inventory, struct item *item)
     return false;
 }
 
-struct item *inventory_remove(struct inventory *inventory, char *name)
+struct item *inventory_remove(struct inventory *inventory, const char *name)
 {
-    struct item *item = list_find_and_remove(&inventory->contents, &name_comparer, name);
+    struct item *item = list_find_and_remove(&inventory->contents, &name_finder, (void *)name);
     if (item == NULL) {
         return NULL;
     }
@@ -38,13 +39,14 @@ struct item *inventory_remove(struct inventory *inventory, char *name)
     return item;
 }
 
-struct item *inventory_get(struct inventory *inventory, char *name)
+struct item *inventory_get(struct inventory *inventory, const char *name)
 {
-    return list_find(&inventory->contents, &name_comparer, name);
+    return list_find(&inventory->contents, &name_finder, (void *)name);
 }
 
 void inventory_contents_print(struct inventory *inventory)
 {
+    list_sort(&inventory->contents, &name_comparer);
     if (inventory->size == 0) {
         printf("Inventory is empty!\n");
         return;
@@ -59,11 +61,22 @@ void inventory_free(struct inventory *inventory)
     list_free(&inventory->contents);
 }
 
-static bool name_comparer(void *data, char *arg)
+static bool name_finder(void *data, void *arg)
 {
     struct item *item = data;
 
-    if (strncmp(item->name, arg, strlen(item->name)) == 0) {
+    if (strncmp(item->name, (char *)arg, strlen(item->name)) == 0) {
+        return true;
+    }
+    return false;
+}
+
+static bool name_comparer(void *first, void *second)
+{
+    struct item *first_item = first;
+    struct item *second_item = second;
+
+    if (strncmp(first_item->name, second_item->name, strlen(first_item->name)) > 0) {
         return true;
     }
     return false;

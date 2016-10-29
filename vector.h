@@ -8,15 +8,15 @@
 
 struct vector {
     void **data;
-    int capacity;
-    int size;
+    unsigned int capacity;
+    unsigned int size;
     size_t element_size;
 };
 
 void vector_init(struct vector *vector, size_t element_size);
 void vector_add(struct vector *vector, void *element);
-bool vector_remove(struct vector *vector, int index);
-void *vector_get(struct vector *vector, int index);
+bool vector_remove(struct vector *vector, unsigned int index);
+void *vector_get(struct vector *vector, unsigned int index);
 void vector_free(struct vector *vector);
 
 #endif

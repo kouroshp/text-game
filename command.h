@@ -5,10 +5,10 @@
 #include "context.h"
 
 struct command {
-    char *command;
+    const char *command;
     int (*handler)(struct vector *args, struct context *context);
 };
 
-void command_add(struct vector *commands, char *command, int (*handler)(struct vector *args, struct context *context));
+void command_add(struct vector *commands, const char *command, int (*handler)(struct vector *args, struct context *context));
 
 #endif

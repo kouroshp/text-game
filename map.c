@@ -58,11 +58,13 @@ static void populate_map(struct context *context, json_t *json)
             json_t *l = json_array_get(locations, i);
             json_t *x = json_object_get(l, "x");
             json_t *y = json_object_get(l, "y");
+            json_t *exit = json_object_get(l, "exit");
             json_t *inventory = json_object_get(l, "inventory");
             json_t *people = json_object_get(l, "people");
 
             struct location *location = context->map[json_integer_value(x)][json_integer_value(y)];
             location->area = area;
+            location->exit = json_boolean_value(exit);
 
             populate_inventory(&location->inventory, inventory);
             populate_people(&location->people, people);

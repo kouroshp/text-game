@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "item.h"
 
-struct item *item_object_new(char *name,  char *description, int weight)
+struct item *item_object_new(const char *name,  const char *description, unsigned int weight)
 {
     struct item *item = malloc(sizeof(*item));
     item->name = name;
@@ -11,7 +11,7 @@ struct item *item_object_new(char *name,  char *description, int weight)
     return item;
 }
 
-struct item *item_weapon_new(char *name, char *description, int weight, int damage)
+struct item *item_weapon_new(const char *name, const char *description, unsigned int weight, unsigned int damage)
 {
     struct item *item = malloc(sizeof(*item));
     item->name = name;

@@ -1,7 +1,7 @@
 #include <string.h>
 #include "utilities.h"
 
-struct vector *strsplit(char *str, char *sep)
+struct vector *strsplit(char *str, const char *sep)
 {
     struct vector *tokens = malloc(sizeof(*tokens));
     vector_init(tokens, sizeof(char *));

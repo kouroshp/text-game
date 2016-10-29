@@ -143,6 +143,7 @@ int map_handler_where(struct vector *args, struct context *context)
     else {
         printf("You are outside.\n");
     }
+
     return 0;
 }
 
@@ -249,6 +250,16 @@ static void move_player(struct context *context, int x, int y)
 {
     int px = context->player.position.x;
     int py = context->player.position.y;
+
+    if (px + x > 10 ||
+        px + x < 0  ||
+        py + y > 10 ||
+        py + y < 0)
+    {
+        printf("This is uncharted land, you step back into safety\n");
+        return;
+    }
+
     struct location *current  = context->map[px][py];
     struct location *new = context->map[px + x][py + y];
 

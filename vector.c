@@ -23,9 +23,9 @@ void vector_add(struct vector *vector, void *element)
     vector->size++;
 }
 
-bool vector_remove(struct vector *vector, int index)
+bool vector_remove(struct vector *vector, unsigned int index)
 {
-    if (index < 0 || index > vector->size) {
+    if (index > vector->size) {
         return false;
     }
     for (int i = index; i < vector->size - 1; i++) {
@@ -35,11 +35,8 @@ bool vector_remove(struct vector *vector, int index)
     return true;
 }
 
-void *vector_get(struct vector *vector, int index)
+void *vector_get(struct vector *vector, unsigned int index)
 {
-    if (index < 0) {
-        return vector->data[0];
-    }
     if (index > vector->size) {
         return vector->data[vector->size];
     }

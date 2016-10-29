@@ -9,8 +9,11 @@ struct node {
     struct node *next;
 };
 
-static struct node *get_node(struct list *list, int index);
+static struct node *get_node(struct list *list, unsigned int index);
 static void *remove_node(struct list *list, struct node *node);
+static struct node *merge_sort(struct node *node, bool (*compare)(void *first, void *second));
+static struct node *get_middle(struct node *node);
+static struct node *merge(struct node *first, struct node *second, bool (*compare)(void *first, void *second));
 
 void list_init(struct list *list)
 {
@@ -40,7 +43,7 @@ void list_add(struct list *list, void *element)
     list->end = node;
 }
 
-void *list_get(struct list *list, int index)
+void *list_get(struct list *list, unsigned int index)
 {
     struct node *node = get_node(list, index);
     if (node == NULL) {
@@ -49,7 +52,7 @@ void *list_get(struct list *list, int index)
     return node->data;
 }
 
-void *list_find(struct list *list, bool (*compare)(void *data, char *arg), char *arg)
+void *list_find(struct list *list, bool (*compare)(void *data, void *arg), void *arg)
 {
     for (struct node* node = list->begin; node != NULL; node = node->next) {
         if (compare(node->data, arg)) {
@@ -59,7 +62,7 @@ void *list_find(struct list *list, bool (*compare)(void *data, char *arg), char 
     return NULL;
 }
 
-void *list_remove(struct list *list, int index)
+void *list_remove(struct list *list, unsigned int index)
 {
     struct node *node = get_node(list, index);
     if (node == NULL) {
@@ -68,7 +71,7 @@ void *list_remove(struct list *list, int index)
     return remove_node(list, node);
 }
 
-void *list_find_and_remove(struct list *list, bool (*compare)(void *data, char *arg), char *arg)
+void *list_find_and_remove(struct list *list, bool (*compare)(void *data, void *arg), void *arg)
 {
     for (struct node* node = list->begin; node != NULL; node = node->next) {
         if (compare(node->data, arg)) {
@@ -100,9 +103,80 @@ void list_free(struct list *list)
     }
 }
 
-static struct node *get_node(struct list *list, int index)
+void list_sort(struct list *list, bool (*compare)(void *first, void *second))
 {
-    if (list->size == 0 || index < 0 || index > list->size - 1) {
+    if (list->size == 0) {
+        return;
+    }
+
+    list->begin = merge_sort(list->begin, compare);
+
+    for (struct node *node = list->begin; node != NULL; node = node->next) {
+        list->end = node;
+    }
+}
+
+static struct node *merge_sort(struct node *first, bool (*compare)(void *first, void *second))
+{
+    if (first->next == NULL) {
+        return first;
+    }
+
+    struct node *middle = get_middle(first);
+    struct node *second = middle->next;
+    middle->next = NULL;
+
+    struct node *left = merge_sort(first, compare);
+    struct node *right = merge_sort(second, compare);
+
+    return merge(left, right, compare);
+}
+
+static struct node *merge(struct node *first, struct node *second, bool (*compare)(void *first, void *second))
+{
+    struct node dummy;
+    struct node *curr = &dummy;
+
+    while (first != NULL) {
+        while (second != NULL) {
+            if (compare(first->data, second->data)) {
+                curr->next = second;
+                second->prev = curr;
+                curr = second;
+            }
+            else {
+                break;
+            }
+            second = second->next;
+        }
+        curr->next = first;
+        first->prev = curr;
+        curr = first;
+        first = first->next;
+    }
+    if (second != NULL) {
+        curr->next = second;
+        second->prev = curr;
+    }
+
+    return dummy.next;
+}
+
+static struct node *get_middle(struct node *node) {
+    struct node *i = node;
+    struct node *j = node;
+
+    while (j->next != NULL && j->next->next != NULL) {
+        i = i->next;
+        j = j->next->next;
+    }
+
+    return i;
+}
+
+static struct node *get_node(struct list *list, unsigned int index)
+{
+    if (list->size == 0 || index > list->size - 1) {
         return NULL;
     }
 

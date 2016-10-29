@@ -3,7 +3,7 @@
 #include "person.h"
 #include <stdbool.h>
 
-void area_init(struct area *area, char *name, char *description)
+void area_init(struct area *area, const char *name, const char *description)
 {
     area->name = name;
     area->description = description;
