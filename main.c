@@ -40,7 +40,7 @@ int main(void)
     // Start game
     linenoiseClearScreen();
     char *name;
-    printf("What is your name?\n");
+    puts("What is your name?");
     name = linenoise("> ");
     person_init(&context.player, name);
     printf("Hello, %s!\n", context.player.name);
@@ -89,6 +89,6 @@ static int handle_input(char *input, struct vector *commands, struct context *co
         }
     }
 
-    printf("I don't understand that!\n");
+    puts("I don't understand that!");
     return 0;
 }

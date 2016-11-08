@@ -48,7 +48,7 @@ void inventory_contents_print(struct inventory *inventory)
 {
     list_sort(&inventory->contents, &name_comparer);
     if (inventory->size == 0) {
-        printf("Inventory is empty!\n");
+        puts("Inventory is empty!");
         return;
     }
 

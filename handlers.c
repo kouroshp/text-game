@@ -35,7 +35,7 @@ void handlers_free(struct vector *commands)
 int handler_quit(struct vector *args, struct context *context)
 {
     if (context->player.in_combat) {
-        printf("Coward.\n");
+        puts("Coward.");
     }
     return 1;
 }
@@ -49,13 +49,13 @@ int inventory_handler_show(struct vector *args, struct context *context)
 int inventory_handler_pickup(struct vector *args, struct context *context)
 {
     if (args->size == 1) {
-        printf("Pick up what?\n");
+        puts("Pick up what?");
         return 0;
     }
 
     struct location *location = context->map[context->player.position.x][context->player.position.y];
     if (location == NULL || (location != NULL && location->inventory.size == 0)) {
-        printf("There is nothing here to pick up...\n");
+        puts("There is nothing here to pick up...");
         return 0;
     }
 
@@ -63,14 +63,14 @@ int inventory_handler_pickup(struct vector *args, struct context *context)
     struct item *item = inventory_remove(&location->inventory, vector_get(args, 1));
     if (item != NULL) {
         if (!inventory_add(&context->player.inventory, item)) {
-            printf("Your inventory is full!\n");
+            puts("Your inventory is full!");
             // Put it back
             inventory_add(&location->inventory, item);
             return 0;
         }
     }
     else {
-        printf("You can't pick up that...\n");
+        puts("You can't pick up that...");
     }
 
     return 0;
@@ -79,19 +79,19 @@ int inventory_handler_pickup(struct vector *args, struct context *context)
 int inventory_handler_drop(struct vector *args, struct context *context)
 {
     if (args->size == 1) {
-        printf("Drop what?\n");
+        puts("Drop what?");
         return 0;
     }
 
     struct item *item = inventory_remove(&context->player.inventory, vector_get(args, 1));
     if (item == NULL) {
-        printf("You don't have that in your inventory...\n");
+        puts("You don't have that in your inventory...");
         return 0;
     }
 
     struct location *location = context->map[context->player.position.x][context->player.position.y];
     if (location == NULL || (location != NULL && location->inventory.size + item->weight > location->inventory.capacity)) {
-        printf("You can't drop anything here...\n");
+        puts("You can't drop anything here...");
         // Put it back
         inventory_add(&context->player.inventory, item);
         return 0;
@@ -104,7 +104,7 @@ int inventory_handler_drop(struct vector *args, struct context *context)
 int map_handler_move(struct vector *args, struct context *context)
 {
     if (context->player.in_combat == true) {
-        printf("You cannot move while in combat\n");
+        puts("You cannot move while in combat");
         return 0;
     }
 
@@ -141,7 +141,7 @@ int map_handler_where(struct vector *args, struct context *context)
         printf("You are in %s\n", location->area->description);
     }
     else {
-        printf("You are outside.\n");
+        puts("You are outside.");
     }
 
     return 0;
@@ -153,18 +153,18 @@ int map_handler_look(struct vector *args, struct context *context)
 
     if (location != NULL) {
         if (location->inventory.size > 0) {
-            printf("You see something in the darkness...\n");
+            puts("You see something in the darkness...");
             inventory_contents_print(&location->inventory);
         }
         if (location->people.size > 0) {
-            printf("There is someone here...\n");
+            puts("There is someone here...");
             for (int i = 0; i < location->people.size; i++) {
                 struct person *p = vector_get(&location->people, i);
                 printf("%s\n", p->name);
             }
         }
         else {
-            printf("There is no one here...\n");
+            puts("There is no one here...");
         }
     }
     return 0;
@@ -173,13 +173,13 @@ int map_handler_look(struct vector *args, struct context *context)
 int player_handler_attack(struct vector *args, struct context *context)
 {
     if (args->size == 1) {
-        printf("Attack who?\n");
+        puts("Attack who?");
         return 0;
     }
 
     struct location *location = context->map[context->player.position.x][context->player.position.y];
     if (location == NULL) {
-        printf("There is no one here...\n");
+        puts("There is no one here...");
         return 0;
     }
 
@@ -194,14 +194,14 @@ int player_handler_attack(struct vector *args, struct context *context)
     }
 
     if (person == NULL) {
-        printf("There's no one here with that name...\n");
+        puts("There's no one here with that name...");
         return 0;
     }
 
     struct item *weapon = context->player.weapon;
 
     if (weapon == NULL) {
-        printf("You do not have a weapon equipped...\n");
+        puts("You do not have a weapon equipped...");
         return 0;
     }
     if (weapon->type != WEAPON) {
@@ -230,7 +230,7 @@ int player_handler_attack(struct vector *args, struct context *context)
             printf("%s counter-attacks with their %s causing %d damage\n", person->name, person->weapon->description, person->weapon->damage);
 
             if (context->player.health <= 0) {
-                printf("You died\n");
+                puts("You died");
                 return 1;
             }
             printf("Your health is now %d\n", context->player.health);
@@ -256,7 +256,7 @@ static void move_player(struct context *context, int x, int y)
         py + y > 10 ||
         py + y < 0)
     {
-        printf("This is uncharted land, you step back into safety\n");
+        puts("This is uncharted land, you step back into safety");
         return;
     }
 
@@ -264,7 +264,7 @@ static void move_player(struct context *context, int x, int y)
     struct location *new = context->map[px + x][py + y];
 
     if (current->area != NULL && new->area != current->area && !current->exit) {
-        printf("You can't walk through walls...\n");
+        puts("You can't walk through walls...");
         return;
     }
 
